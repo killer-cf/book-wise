@@ -11,7 +11,7 @@ export const Container = styled('main', {
 })
 
 export const ImageContainer = styled('div', {
-  width: '38%',
+  width: '40%',
   position: 'relative',
 
   img: {
