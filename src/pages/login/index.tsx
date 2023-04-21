@@ -8,8 +8,15 @@ import {
   LoginContainer,
 } from './styles'
 import ÌmageIntro from 'public/images/intro.png'
+import { useRouter } from 'next/router'
 
-export default function Home() {
+export default function Login() {
+  const router = useRouter()
+
+  async function handleNavigateToHome() {
+    await router.push('/home')
+  }
+
   return (
     <Container>
       <ImageContainer>
@@ -40,7 +47,7 @@ export default function Home() {
             />
             Entrar com GitHub
           </Button>
-          <Button>
+          <Button onClick={handleNavigateToHome}>
             <Image
               src="/images/RocketLaunch.png"
               width={32}
