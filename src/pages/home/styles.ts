@@ -29,6 +29,13 @@ export const Header = styled('header', {
 
 export const Bookshelf = styled('div', {
   display: 'flex',
+
+  h3: {
+    color: '$gray100',
+    fontSize: '$sm',
+    fontWeight: 400,
+    lineHeight: '$base',
+  },
 })
 
 export const Feed = styled('div', {
@@ -46,13 +53,6 @@ export const RecentReading = styled('section', {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '$4',
-  },
-
-  h3: {
-    color: '$gray100',
-    fontSize: '$sm',
-    fontWeight: 400,
-    lineHeight: '$base',
   },
 
   a: {
@@ -86,15 +86,6 @@ export const BoxLastReading = styled('div', {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '$3',
-
-    div: {
-      display: 'flex',
-      gap: '$1',
-    },
-
-    svg: {
-      color: '$purple100',
-    },
   },
 
   h2: {
@@ -112,6 +103,71 @@ export const BoxLastReading = styled('div', {
   },
 })
 
-export const RecentReviews = styled('section', {})
+export const RecentReviews = styled('section', {
+  paddingTop: '$10',
+})
+
+export const BoxRecentReviews = styled('div', {
+  backgroundColor: '$gray700',
+  display: 'flex',
+  flexDirection: 'column',
+  marginTop: '$4',
+  padding: '$5 $6',
+  borderRadius: '$md',
+  gap: '$6',
+  alignItems: 'flex-start',
+
+  '> header': {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '$4',
+  },
+})
+
+export const UserBox = styled('div', {
+  display: 'flex',
+  gap: '$4',
+
+  strong: {
+    color: '$gray100',
+    fontSize: '$md',
+    fontWeight: 400,
+    lineHeight: '$base',
+  },
+
+  p: {
+    color: '$gray400',
+    fontSize: '$sm',
+    lineHeight: '$base',
+  },
+})
+
+export const BookDetails = styled('div', {
+  display: 'flex',
+  flex: 1,
+  gap: '$6',
+
+  h2: {
+    color: '$gray100',
+    fontSize: '$md',
+    lineHeight: '$base',
+  },
+
+  span: {
+    display: 'inline-block',
+    color: '$gray400',
+    fontSize: '$sm',
+    lineHeight: '$base',
+    marginBottom: '$5',
+  },
+
+  p: {
+    color: '$gray300',
+    fontSize: '$sm',
+    lineHeight: '$base',
+  },
+})
 
 export const Spotlight = styled('section', {})
