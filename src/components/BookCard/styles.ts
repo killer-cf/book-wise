@@ -3,12 +3,16 @@ import { styled } from '../../../stitches.config'
 export const Container = styled('div', {
   backgroundColor: '$gray700',
   display: 'flex',
-  width: '20.25rem',
+  maxWidth: '20.25rem',
   marginBottom: '$5',
   padding: '$4 $5',
   borderRadius: '$md',
   gap: '$5',
   alignItems: 'stretch',
+
+  '@media screen and (max-width: 1024px)': {
+    marginBottom: 0,
+  },
 
   h2: {
     color: '$gray100',

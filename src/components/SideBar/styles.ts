@@ -1,10 +1,10 @@
 import { styled } from '../../../stitches.config'
 
 export const Container = styled('aside', {
-  margin: '$5 $5 $4',
+  margin: '$5 0 $4 $5',
   paddingTop: '$10',
   height: 'calc(100vh - 2.25rem)',
-  width: '14.5rem',
+  minWidth: '14.5rem',
   backgroundImage: "url('/images/background-sidebar.svg')",
   backgroundSize: 'cover',
   display: 'flex',
@@ -12,6 +12,11 @@ export const Container = styled('aside', {
   alignItems: 'center',
   justifyContent: 'space-between',
   borderRadius: '$md',
+
+  '@media screen and (max-width: 1024px)': {
+    width: '12.5rem',
+    minWidth: 'unset',
+  },
 })
 
 export const Links = styled('div', {

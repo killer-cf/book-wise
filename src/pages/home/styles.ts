@@ -8,7 +8,11 @@ export const Container = styled('div', {
 
 export const Content = styled('main', {
   flex: 1,
-  padding: '4rem 4.75rem 6rem',
+  padding: '4rem 4.75rem',
+
+  '@media screen and (max-width: 1024px)': {
+    padding: '4rem 3%',
+  },
 })
 
 export const Header = styled('header', {
@@ -29,11 +33,16 @@ export const Header = styled('header', {
 
 export const Bookshelf = styled('div', {
   display: 'flex',
+  justifyContent: 'space-between',
+
+  '@media screen and (max-width: 1024px)': {
+    flexDirection: 'column-reverse',
+  },
 })
 
 export const Feed = styled('div', {
   maxWidth: '38rem',
-  flex: 1,
+  minWidth: '28.75rem',
   display: 'flex',
   flexDirection: 'column',
 })
@@ -171,6 +180,23 @@ export const BookDetails = styled('div', {
 })
 
 export const Spotlight = styled('section', {
-  width: '20.25rem',
+  maxWidth: '20.25rem',
+  flex: 1,
   marginLeft: '3rem',
+
+  '@media screen and (max-width: 1024px)': {
+    maxWidth: '38rem',
+    display: 'grid',
+    gap: '$5',
+    gridTemplateColumns: '1fr 1fr',
+    marginLeft: 0,
+    marginBottom: '$10',
+  },
+  [`${Subtitle}`]: {
+    '@media screen and (max-width: 1024px)': {
+      marginBottom: 0,
+      gridColumnStart: 1,
+      gridColumnEnd: 3,
+    },
+  },
 })
