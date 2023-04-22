@@ -29,13 +29,6 @@ export const Header = styled('header', {
 
 export const Bookshelf = styled('div', {
   display: 'flex',
-
-  h3: {
-    color: '$gray100',
-    fontSize: '$sm',
-    fontWeight: 400,
-    lineHeight: '$base',
-  },
 })
 
 export const Feed = styled('div', {
@@ -45,14 +38,18 @@ export const Feed = styled('div', {
   flexDirection: 'column',
 })
 
-export const RecentReading = styled('section', {
-  flex: 1,
+export const Subtitle = styled('div', {
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: '$4',
 
-  '> header': {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '$4',
+  h3: {
+    color: '$gray100',
+    fontSize: '$sm',
+    fontWeight: 400,
+    lineHeight: '$base',
   },
 
   a: {
@@ -65,6 +62,10 @@ export const RecentReading = styled('section', {
     alignItems: 'center',
     gap: '$2',
   },
+})
+
+export const RecentReading = styled('section', {
+  flex: 1,
 })
 
 export const BoxLastReading = styled('div', {
@@ -117,12 +118,11 @@ export const BoxRecentReviews = styled('div', {
   gap: '$6',
   alignItems: 'flex-start',
 
-  '> header': {
+  header: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '$4',
   },
 })
 
@@ -170,4 +170,7 @@ export const BookDetails = styled('div', {
   },
 })
 
-export const Spotlight = styled('section', {})
+export const Spotlight = styled('section', {
+  width: '20.25rem',
+  marginLeft: '3rem',
+})

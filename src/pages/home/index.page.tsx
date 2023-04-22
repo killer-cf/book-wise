@@ -17,8 +17,10 @@ import {
   RecentReading,
   RecentReviews,
   Spotlight,
+  Subtitle,
   UserBox,
 } from './styles'
+import { BookCard } from '@/components/BookCard'
 
 export default function Home() {
   return (
@@ -32,12 +34,12 @@ export default function Home() {
         <Bookshelf>
           <Feed>
             <RecentReading>
-              <header>
+              <Subtitle>
                 <h3>Sua última leitura</h3>
                 <Link href="">
                   Ver todas <CaretRight />
                 </Link>
-              </header>
+              </Subtitle>
 
               <BoxLastReading>
                 <Image
@@ -64,8 +66,9 @@ export default function Home() {
               </BoxLastReading>
             </RecentReading>
             <RecentReviews>
-              <h3>Avaliações mais recentes</h3>
-
+              <Subtitle>
+                <h3>Avaliações mais recentes</h3>
+              </Subtitle>
               <BoxRecentReviews>
                 <header>
                   <UserBox>
@@ -133,7 +136,19 @@ export default function Home() {
               </BoxRecentReviews>
             </RecentReviews>
           </Feed>
-          <Spotlight></Spotlight>
+          <Spotlight>
+            <Subtitle>
+              <h3>Destaques</h3>
+              <Link href="">
+                Ver todos <CaretRight />
+              </Link>
+            </Subtitle>
+
+            <BookCard />
+            <BookCard />
+            <BookCard />
+            <BookCard />
+          </Spotlight>
         </Bookshelf>
       </Content>
     </Container>
