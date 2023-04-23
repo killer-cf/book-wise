@@ -4,14 +4,23 @@ export const Container = styled('div', {
   display: 'flex',
   maxWidth: '1440px',
   margin: '0 auto',
+
+  '@media (max-width: 768px)': {
+    flexDirection: 'column',
+  },
 })
 
 export const Content = styled('main', {
   flex: 1,
   padding: '4rem 4.75rem',
 
-  '@media screen and (max-width: 1024px)': {
+  '@media screen and (max-width: 1224px)': {
     padding: '4rem 3%',
+  },
+
+  '@media (max-width: 768px)': {
+    position: 'absolute',
+    padding: '6rem 4%',
   },
 })
 
@@ -36,6 +45,7 @@ export const Bookshelf = styled('div', {
   justifyContent: 'space-between',
 
   '@media screen and (max-width: 1024px)': {
+    alignItems: 'center',
     flexDirection: 'column-reverse',
   },
 })
@@ -186,6 +196,7 @@ export const Spotlight = styled('section', {
 
   '@media screen and (max-width: 1024px)': {
     maxWidth: '38rem',
+    width: '100%',
     display: 'grid',
     gap: '$5',
     gridTemplateColumns: '1fr 1fr',
@@ -198,5 +209,14 @@ export const Spotlight = styled('section', {
       gridColumnStart: 1,
       gridColumnEnd: 3,
     },
+
+    '@media screen and (max-width: 524px)': {
+      marginBottom: 0,
+      gridColumnStart: 1,
+      gridColumnEnd: 2,
+    },
+  },
+  '@media screen and (max-width: 524px)': {
+    gridTemplateColumns: '1fr',
   },
 })

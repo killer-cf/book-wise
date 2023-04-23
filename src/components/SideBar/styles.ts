@@ -17,6 +17,16 @@ export const Container = styled('aside', {
     width: '12.5rem',
     minWidth: 'unset',
   },
+
+  '@media screen and (max-width: 768px)': {
+    all: 'unset',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundImage: "url('/images/background-sidebar.svg')",
+    backgroundSize: 'cover',
+    padding: '$4 $5',
+    zIndex: 1000,
+  },
 })
 
 export const Links = styled('div', {
@@ -58,6 +68,10 @@ export const Links = styled('div', {
   svg: {
     color: '$gray400',
   },
+
+  '@media (max-width: 768px)': {
+    display: 'none',
+  },
 })
 
 export const Button = styled('button', {
@@ -66,8 +80,7 @@ export const Button = styled('button', {
   alignItems: 'center',
   justifyContent: 'start',
   gap: '$3',
-  padding: '$5 $6',
-  height: '4.5rem',
+  padding: '$5 $5',
   border: 0,
   cursor: 'pointer',
 
@@ -78,5 +91,26 @@ export const Button = styled('button', {
 
   svg: {
     color: '$green100',
+  },
+
+  '@media (max-width: 768px)': {
+    display: 'none',
+  },
+})
+
+export const MenuMobile = styled('button', {
+  all: 'unset',
+  display: 'none',
+  position: 'absolute',
+  top: '$4',
+  right: '$5',
+  cursor: 'pointer',
+
+  svg: {
+    color: '$gray200',
+  },
+
+  '@media (max-width: 768px)': {
+    display: 'block',
   },
 })

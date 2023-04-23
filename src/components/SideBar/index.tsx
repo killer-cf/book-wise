@@ -1,11 +1,20 @@
 import Image from 'next/image'
-import { Button, Container, Links } from './styles'
+import { Button, Container, Links, MenuMobile } from './styles'
 import Link from 'next/link'
-import { Binoculars, ChartLineUp, SignIn, User } from 'phosphor-react'
+import { Binoculars, ChartLineUp, List, SignIn, User } from 'phosphor-react'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 export function SideBar() {
   const router = useRouter()
+  const [menu, setMenu] = useState('')
+
+  function handleMenu() {
+    setMenu(() => {
+      const status = menu === 'flex' ? 'none' : 'flex'
+      return status
+    })
+  }
 
   return (
     <Container>
@@ -17,7 +26,7 @@ export function SideBar() {
           alt="bookwise logo"
         />
 
-        <Links>
+        <Links style={{ display: `${menu}` }}>
           <Link
             href="/home"
             className={router.pathname === '/home' ? 'active' : ''}
@@ -46,10 +55,13 @@ export function SideBar() {
           </Link>
         </Links>
       </div>
-      <Button>
+      <Button style={{ display: `${menu}` }}>
         Fazer login
         <SignIn size={20} />
       </Button>
+      <MenuMobile onClick={handleMenu}>
+        <List size={32} />
+      </MenuMobile>
     </Container>
   )
 }
