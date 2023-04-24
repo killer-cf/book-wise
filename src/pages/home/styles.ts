@@ -55,6 +55,10 @@ export const Feed = styled('div', {
   minWidth: '28.75rem',
   display: 'flex',
   flexDirection: 'column',
+
+  '@media screen and (max-width: 524px)': {
+    minWidth: 'unset',
+  },
 })
 
 export const Subtitle = styled('div', {
@@ -94,6 +98,7 @@ export const BoxLastReading = styled('div', {
   borderRadius: '$md',
   gap: '$6',
   alignItems: 'flex-start',
+  position: 'relative',
 
   p: {
     color: '$gray300',
@@ -106,6 +111,15 @@ export const BoxLastReading = styled('div', {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '$3',
+
+    '@media screen and (max-width: 524px)': {
+      position: 'absolute',
+      flexDirection: 'column-reverse',
+      alignItems: 'flex-start',
+      gap: '$2',
+      top: '$4',
+      right: '$5',
+    },
   },
 
   h2: {
@@ -120,6 +134,10 @@ export const BoxLastReading = styled('div', {
     fontSize: '$sm',
     lineHeight: '$base',
     marginBottom: '$6',
+  },
+
+  '@media screen and (max-width: 524px)': {
+    flexDirection: 'column',
   },
 })
 
@@ -186,6 +204,10 @@ export const BookDetails = styled('div', {
     color: '$gray300',
     fontSize: '$sm',
     lineHeight: '$base',
+  },
+
+  '@media screen and (max-width: 524px)': {
+    flexDirection: 'column',
   },
 })
 
