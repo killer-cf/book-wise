@@ -37,7 +37,7 @@ export function SideBar() {
           </Link>
 
           <Link
-            href=""
+            href="/explorer"
             className={router.pathname === '/explorer' ? 'active' : ''}
           >
             <div></div>
