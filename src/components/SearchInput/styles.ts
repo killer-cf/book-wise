@@ -18,10 +18,15 @@ export const Container = styled('div', {
     opacity: 0.5,
     cursor: 'not-allowed',
   },
+
+  '@media screen and (max-width: 768px)': {
+    height: '2.5rem',
+    padding: '0.875rem $3',
+  },
 })
 
 export const Input = styled('input', {
-  flex: 1,
+  width: '95%',
   background: 'transparent',
   border: 0,
 

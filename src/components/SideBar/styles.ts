@@ -15,7 +15,7 @@ export const Container = styled('aside', {
 
   '@media screen and (max-width: 1024px)': {
     width: '12.5rem',
-    minWidth: 'unset',
+    minWidth: '12.5rem',
   },
 
   '@media screen and (max-width: 768px)': {
