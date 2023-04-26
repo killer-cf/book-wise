@@ -31,7 +31,7 @@ export default function Explorer() {
             <h1>Explorar</h1>
           </Title>
           <SearchForm>
-            <SearchInput />
+            <SearchInput placeholder="Buscar livro ou autor" />
           </SearchForm>
         </Header>
 

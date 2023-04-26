@@ -34,6 +34,12 @@ export const Input = styled('input', {
   lineHeight: '$base',
   color: '$gray100',
 
+  '&::placeholder': {
+    color: '$gray400',
+    fontSize: '$sm',
+    lineHeight: '$base',
+  },
+
   '&:focus': {
     outline: 0,
   },
