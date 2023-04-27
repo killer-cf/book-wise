@@ -19,6 +19,7 @@ export const Content = styled('main', {
   },
 
   '@media (max-width: 768px)': {
+    width: '100%',
     position: 'absolute',
     padding: '6rem 4%',
   },
@@ -43,12 +44,26 @@ export const Header = styled('header', {
 export const ReviewsAndProfile = styled('div', {
   display: 'flex',
   justifyContent: 'space-between',
+
+  '@media screen and (max-width: 768px)': {
+    flexDirection: 'column-reverse',
+  },
 })
 
 export const ReviewsWrapper = styled('div', {
   flex: 1,
   marginRight: '$10',
   maxWidth: '39rem',
+
+  '@media screen and (max-width: 1024px)': {
+    marginRight: '$6',
+  },
+
+  '@media screen and (max-width: 768px)': {
+    maxWidth: 'unset',
+    width: '100%',
+    marginRight: 0,
+  },
 })
 
 export const SearchForm = styled('form', {})
@@ -117,6 +132,19 @@ export const UserProfile = styled('div', {
   alignItems: 'center',
   gap: '$8',
   borderLeft: '1px solid $gray700',
+
+  '@media screen and (max-width: 1024px)': {
+    width: '13.25rem',
+  },
+
+  '@media screen and (max-width: 768px)': {
+    width: '100%',
+    borderLeft: '1px solid transparent',
+    // flexDirection: 'row-reverse',
+    alignItems: 'start',
+    marginBottom: '$8',
+    justifyContent: 'start',
+  },
 })
 
 export const ProfileHeader = styled('div', {
@@ -137,6 +165,10 @@ export const ProfileHeader = styled('div', {
     lineHeight: '$base',
     marginBottom: '$2',
   },
+
+  '@media screen and (max-width: 768px)': {
+    width: 'unset',
+  },
 })
 
 export const Spacer = styled('div', {
@@ -144,6 +176,10 @@ export const Spacer = styled('div', {
   height: 4,
   borderRadius: '$full',
   backgroundImage: '$gradient-horizontal',
+
+  '@media screen and (max-width: 768px)': {
+    display: 'none',
+  },
 })
 
 export const UserInfo = styled('div', {
@@ -152,6 +188,15 @@ export const UserInfo = styled('div', {
   flexDirection: 'column',
   alignItems: 'start',
   paddingLeft: '3.5rem',
+
+  '@media screen and (max-width: 1024px)': {
+    paddingLeft: '2rem',
+  },
+
+  '@media screen and (max-width: 768px)': {
+    width: 'unset',
+    paddingLeft: 0,
+  },
 })
 
 export const InfoBox = styled('div', {
@@ -174,5 +219,9 @@ export const InfoBox = styled('div', {
     color: '$gray300',
     fontSize: '$sm',
     lineHeight: '$base',
+  },
+
+  '@media screen and (max-width: 768px)': {
+    margin: '$3 0',
   },
 })
