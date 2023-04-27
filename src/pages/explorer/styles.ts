@@ -101,13 +101,19 @@ export const Bookshelf = styled('div', {
   gap: '$5',
 })
 
-export const BookCard = styled('div', {
+export const BookCard = styled('button', {
   backgroundColor: '$gray700',
   display: 'flex',
   padding: '$4 $5',
   borderRadius: '$md',
   gap: '$5',
   alignItems: 'stretch',
+  border: '2px solid transparent',
+  cursor: 'pointer',
+
+  '&:hover': {
+    border: '2px solid $gray500',
+  },
 
   '@media screen and (max-width: 1024px)': {
     marginBottom: 0,

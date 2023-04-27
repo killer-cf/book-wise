@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import { Binoculars } from 'phosphor-react'
+import Image from 'next/image'
 
+import { StarsReview } from '@/components/StarsReview'
 import { SearchInput } from '@/components/SearchInput'
 import { SideBar } from '@/components/SideBar'
+import { ReviewModal } from '@/components/ReviewModal'
 import {
   Bookshelf,
   Container,
@@ -15,8 +18,6 @@ import {
   BookDetails,
   SearchForm,
 } from './styles'
-import Image from 'next/image'
-import { StarsReview } from '@/components/StarsReview'
 
 export default function Explorer() {
   const [filter, setFilter] = useState('Tudo')
@@ -57,21 +58,23 @@ export default function Explorer() {
         </Filters>
 
         <Bookshelf>
-          <BookCard>
-            <Image
-              src="/images/books/o-hobbit.png"
-              alt=""
-              width={108}
-              height={152}
-            />
-            <BookDetails>
-              <div>
-                <h2>O Hobbit</h2>
-                <span>J.R.R. Tolkien</span>
-              </div>
-              <StarsReview />
-            </BookDetails>
-          </BookCard>
+          <ReviewModal>
+            <BookCard>
+              <Image
+                src="/images/books/o-hobbit.png"
+                alt=""
+                width={108}
+                height={152}
+              />
+              <BookDetails>
+                <div>
+                  <h2>O Hobbit</h2>
+                  <span>J.R.R. Tolkien</span>
+                </div>
+                <StarsReview />
+              </BookDetails>
+            </BookCard>
+          </ReviewModal>
 
           <BookCard>
             <Image
