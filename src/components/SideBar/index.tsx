@@ -46,8 +46,8 @@ export function SideBar() {
           </Link>
 
           <Link
-            href=""
-            className={router.pathname === '/perfil' ? 'active' : ''}
+            href="/profile"
+            className={router.pathname === '/profile' ? 'active' : ''}
           >
             <div></div>
             <User size={24} />

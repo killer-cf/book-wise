@@ -7,15 +7,17 @@ import {
   AvatarBorder,
 } from './styles'
 
-interface AvatarProps extends ComponentProps<typeof AvatarImage> {}
+interface AvatarProps extends ComponentProps<typeof AvatarImage> {
+  size: 'sm' | 'lg' | undefined
+}
 
-export function Avatar(props: AvatarProps) {
+export function Avatar({ size = 'sm', ...rest }: AvatarProps) {
   return (
-    <AvatarBorder>
-      <AvatarContainer>
-        <AvatarImage {...props} />
+    <AvatarBorder size={size}>
+      <AvatarContainer size={size}>
+        <AvatarImage {...rest} />
 
-        <AvatarFallback delayMs={600}>
+        <AvatarFallback size={size} delayMs={600}>
           <User />
         </AvatarFallback>
       </AvatarContainer>

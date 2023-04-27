@@ -2,21 +2,53 @@ import * as Avatar from '@radix-ui/react-avatar'
 import { styled } from '../../../stitches.config'
 
 export const AvatarBorder = styled('div', {
-  width: '2.5rem',
-  height: '2.5rem',
   borderRadius: '$full',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   backgroundImage: '$gradient-vertical',
+
+  variants: {
+    size: {
+      sm: {
+        width: '2.5rem',
+        height: '2.5rem',
+      },
+
+      lg: {
+        width: '4.5rem',
+        height: '4.5rem',
+      },
+    },
+  },
+
+  defaultVariants: {
+    size: 'sm',
+  },
 })
 
 export const AvatarContainer = styled(Avatar.Root, {
   borderRadius: '$full',
   display: 'inline-block',
-  width: '2.28rem',
-  height: '2.28rem',
   overflow: 'hidden',
+
+  variants: {
+    size: {
+      sm: {
+        width: '2.28rem',
+        height: '2.28rem',
+      },
+
+      lg: {
+        width: '4.28rem',
+        height: '4.28rem',
+      },
+    },
+  },
+
+  defaultVariants: {
+    size: 'sm',
+  },
 })
 
 export const AvatarImage = styled(Avatar.Image, {
@@ -35,8 +67,25 @@ export const AvatarFallback = styled(Avatar.Fallback, {
   backgroundColor: '$gray600',
   color: '$gray800',
 
-  svg: {
-    width: '1.5rem',
-    height: '1.5rem',
+  variants: {
+    size: {
+      sm: {
+        svg: {
+          width: '1.5rem',
+          height: '1.5rem',
+        },
+      },
+
+      lg: {
+        svg: {
+          width: '2.5rem',
+          height: '2.5rem',
+        },
+      },
+    },
+  },
+
+  defaultVariants: {
+    size: 'sm',
   },
 })
