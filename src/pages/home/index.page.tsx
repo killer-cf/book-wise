@@ -5,6 +5,7 @@ import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { SideBar } from '@/components/SideBar'
 import { Avatar } from '@/components/Avatar'
 import { StarsReview } from '@/components/StarsReview'
+import { BookCard } from '@/components/BookCard'
 import {
   BookDetails,
   Bookshelf,
@@ -20,7 +21,6 @@ import {
   Subtitle,
   UserBox,
 } from './styles'
-import { BookCard } from '@/components/BookCard'
 
 export default function Home() {
   return (
@@ -72,7 +72,7 @@ export default function Home() {
               <BoxRecentReviews>
                 <header>
                   <UserBox>
-                    <Avatar />
+                    <Avatar size="sm" />
                     <div>
                       <strong>Jaxson Dias</strong>
                       <p>Hoje</p>
@@ -105,7 +105,7 @@ export default function Home() {
               <BoxRecentReviews>
                 <header>
                   <UserBox>
-                    <Avatar />
+                    <Avatar size="sm" />
                     <div>
                       <strong>Jaxson Dias</strong>
                       <p>Hoje</p>
