@@ -27,6 +27,11 @@ export const DialogContent = styled(Dialog.Content, {
   boxShadow: '-4px 0px 30px rgba(0, 0, 0, 0.5)',
   height: '100%',
 
+  '@media screen and (max-width: 768px)': {
+    width: '100%',
+    top: '4.25rem',
+  },
+
   '.ScrollAreaRoot': {
     width: '100%',
     overflow: 'hidden',
