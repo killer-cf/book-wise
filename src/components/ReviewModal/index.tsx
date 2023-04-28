@@ -1,5 +1,5 @@
 import { BookOpen, BookmarkSimple, X } from 'phosphor-react'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import Image from 'next/image'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -20,12 +20,19 @@ import {
   Subtitle,
   UserBox,
 } from './styles'
+import { MyReviewForm } from '../MyReviewForm'
 
 interface ReviewDialogProps {
   children: ReactNode
 }
 
 export function ReviewModal({ children }: ReviewDialogProps) {
+  const [isFormReview, setIsFormReview] = useState(false)
+
+  function closeFormReview() {
+    setIsFormReview(false)
+  }
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>{children}</Dialog.Trigger>
@@ -76,8 +83,15 @@ export function ReviewModal({ children }: ReviewDialogProps) {
 
                 <Subtitle>
                   <h3>Avaliações</h3>
-                  <button>Avaliar</button>
+                  {!isFormReview && (
+                    <button type="button" onClick={() => setIsFormReview(true)}>
+                      Avaliar
+                    </button>
+                  )}
                 </Subtitle>
+                {isFormReview && (
+                  <MyReviewForm closeFormReview={closeFormReview} />
+                )}
                 <ReviewsList>
                   <Review>
                     <header>
