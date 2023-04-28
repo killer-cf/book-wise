@@ -21,6 +21,7 @@ import {
   UserBox,
 } from './styles'
 import { MyReviewForm } from '../MyReviewForm'
+import { LoginModal } from '../LoginModal'
 
 interface ReviewDialogProps {
   children: ReactNode
@@ -28,6 +29,7 @@ interface ReviewDialogProps {
 
 export function ReviewModal({ children }: ReviewDialogProps) {
   const [isFormReview, setIsFormReview] = useState(false)
+  const isLogin = false
 
   function closeFormReview() {
     setIsFormReview(false)
@@ -84,9 +86,20 @@ export function ReviewModal({ children }: ReviewDialogProps) {
                 <Subtitle>
                   <h3>Avaliações</h3>
                   {!isFormReview && (
-                    <button type="button" onClick={() => setIsFormReview(true)}>
-                      Avaliar
-                    </button>
+                    <>
+                      {isLogin ? (
+                        <button
+                          type="button"
+                          onClick={() => setIsFormReview(true)}
+                        >
+                          Avaliar
+                        </button>
+                      ) : (
+                        <LoginModal>
+                          <button>Avaliar</button>
+                        </LoginModal>
+                      )}
+                    </>
                   )}
                 </Subtitle>
                 {isFormReview && (
