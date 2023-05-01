@@ -98,6 +98,28 @@ export const Button = styled('button', {
   },
 })
 
+export const LogoutBox = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'start',
+  gap: '$3',
+  padding: '$5 $5',
+
+  p: {
+    color: '$gray200',
+    fontSize: '$sm',
+    lineHeight: '$base',
+  },
+
+  button: {
+    all: 'unset',
+    display: 'flex',
+    alignContent: 'center',
+    color: '#F75A68',
+    cursor: 'pointer',
+  },
+})
+
 export const MenuMobile = styled('button', {
   all: 'unset',
   display: 'none',

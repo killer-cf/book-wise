@@ -10,6 +10,11 @@ export const AvatarBorder = styled('div', {
 
   variants: {
     size: {
+      xs: {
+        width: '2rem',
+        height: '2rem',
+      },
+
       sm: {
         width: '2.5rem',
         height: '2.5rem',
@@ -34,6 +39,11 @@ export const AvatarContainer = styled(Avatar.Root, {
 
   variants: {
     size: {
+      xs: {
+        width: '1.78rem',
+        height: '1.78rem',
+      },
+
       sm: {
         width: '2.28rem',
         height: '2.28rem',
@@ -69,6 +79,13 @@ export const AvatarFallback = styled(Avatar.Fallback, {
 
   variants: {
     size: {
+      xs: {
+        svg: {
+          width: '1rem',
+          height: '1rem',
+        },
+      },
+
       sm: {
         svg: {
           width: '1.5rem',

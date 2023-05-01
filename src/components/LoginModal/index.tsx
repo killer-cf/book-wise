@@ -1,11 +1,17 @@
-import * as Dialog from '@radix-ui/react-dialog'
 import { ReactNode } from 'react'
-import { Button, Close, Content, Overlay, Title } from './styles'
-import { X } from 'phosphor-react'
 import Image from 'next/image'
+import * as Dialog from '@radix-ui/react-dialog'
+import { signIn } from 'next-auth/react'
+import { X } from 'phosphor-react'
+
+import { Button, Close, Content, Overlay, Title } from './styles'
 
 interface LoginModalProps {
   children: ReactNode
+}
+
+async function handleLoginGithub() {
+  signIn('github', { callbackUrl: '/home' })
 }
 
 export function LoginModal({ children }: LoginModalProps) {
@@ -28,7 +34,7 @@ export function LoginModal({ children }: LoginModalProps) {
               />
               Entrar com Google
             </Button>
-            <Button>
+            <Button onClick={handleLoginGithub}>
               <Image
                 src="/images/github-icon.png"
                 width={32}

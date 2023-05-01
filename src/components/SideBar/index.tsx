@@ -1,19 +1,37 @@
-import Image from 'next/image'
-import { Button, Container, Links, MenuMobile } from './styles'
-import Link from 'next/link'
-import { Binoculars, ChartLineUp, List, SignIn, User } from 'phosphor-react'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { signOut, useSession } from 'next-auth/react'
+import {
+  Binoculars,
+  ChartLineUp,
+  List,
+  SignIn,
+  SignOut,
+  User,
+} from 'phosphor-react'
+
+import { Avatar } from '../Avatar'
+import { Button, Container, Links, LogoutBox, MenuMobile } from './styles'
+import { LoginModal } from '../LoginModal'
 
 export function SideBar() {
   const router = useRouter()
   const [menu, setMenu] = useState('')
+  const session = useSession()
+
+  const isAuthenticated = session.status === 'authenticated'
 
   function handleMenu() {
     setMenu(() => {
       const status = menu === 'flex' ? 'none' : 'flex'
       return status
     })
+  }
+
+  async function handleSignOut() {
+    await signOut()
   }
 
   return (
@@ -45,20 +63,35 @@ export function SideBar() {
             Explorar
           </Link>
 
-          <Link
-            href="/profile"
-            className={router.pathname === '/profile' ? 'active' : ''}
-          >
-            <div></div>
-            <User size={24} />
-            Perfil
-          </Link>
+          {isAuthenticated && (
+            <Link
+              href="/profile"
+              className={router.pathname === '/profile' ? 'active' : ''}
+            >
+              <div></div>
+              <User size={24} />
+              Perfil
+            </Link>
+          )}
         </Links>
       </div>
-      <Button style={{ display: `${menu}` }}>
-        Fazer login
-        <SignIn size={20} />
-      </Button>
+      {isAuthenticated ? (
+        <LogoutBox>
+          <Avatar size="xs" src={session.data.user?.image!} />
+          <p>{session.data.user?.name}</p>
+          <button onClick={handleSignOut}>
+            <SignOut size={20} />
+          </button>
+        </LogoutBox>
+      ) : (
+        <LoginModal>
+          <Button style={{ display: `${menu}` }}>
+            Fazer login
+            <SignIn size={20} />
+          </Button>
+        </LoginModal>
+      )}
+
       <MenuMobile onClick={handleMenu}>
         <List size={32} />
       </MenuMobile>

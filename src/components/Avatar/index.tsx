@@ -8,7 +8,7 @@ import {
 } from './styles'
 
 interface AvatarProps extends ComponentProps<typeof AvatarImage> {
-  size: 'sm' | 'lg' | undefined
+  size: 'xs' | 'sm' | 'lg' | undefined
 }
 
 export function Avatar({ size = 'sm', ...rest }: AvatarProps) {
