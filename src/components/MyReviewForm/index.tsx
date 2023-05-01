@@ -2,6 +2,7 @@ import { Check, Star, X } from 'phosphor-react'
 import { Avatar } from '../Avatar'
 import { Button, Container, StarsHate, UserBox } from './styles'
 import { useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 interface MyReviewFormProps {
   closeFormReview: () => void
@@ -9,14 +10,17 @@ interface MyReviewFormProps {
 
 export function MyReviewForm({ closeFormReview }: MyReviewFormProps) {
   const totalStars = 5.0
-  const [activeStars, setActiveStars] = useState(4)
+  const [activeStars, setActiveStars] = useState(0)
+
+  const session = useSession()
+  const user = session.data?.user
 
   return (
     <Container>
       <header>
         <UserBox>
-          <Avatar size="sm" />
-          <strong>Jaxson Dias</strong>
+          <Avatar size="sm" src={user?.image!} />
+          <strong>{user?.name}</strong>
         </UserBox>
         <StarsHate>
           {[...Array(totalStars)].map((_, index) => (

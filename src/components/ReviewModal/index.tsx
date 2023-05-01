@@ -22,6 +22,7 @@ import {
 } from './styles'
 import { MyReviewForm } from '../MyReviewForm'
 import { LoginModal } from '../LoginModal'
+import { useSession } from 'next-auth/react'
 
 interface ReviewDialogProps {
   children: ReactNode
@@ -29,7 +30,8 @@ interface ReviewDialogProps {
 
 export function ReviewModal({ children }: ReviewDialogProps) {
   const [isFormReview, setIsFormReview] = useState(false)
-  const isLogin = false
+  const session = useSession()
+  const isAuthenticated = session.status === 'authenticated'
 
   function closeFormReview() {
     setIsFormReview(false)
@@ -87,7 +89,7 @@ export function ReviewModal({ children }: ReviewDialogProps) {
                   <h3>Avaliações</h3>
                   {!isFormReview && (
                     <>
-                      {isLogin ? (
+                      {isAuthenticated ? (
                         <button
                           type="button"
                           onClick={() => setIsFormReview(true)}
