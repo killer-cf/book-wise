@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 
 import { SideBar } from '@/components/SideBar'
@@ -23,6 +24,9 @@ import {
 } from './styles'
 
 export default function Home() {
+  const session = useSession()
+  console.log(session)
+
   return (
     <Container>
       <SideBar />
