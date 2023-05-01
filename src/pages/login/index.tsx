@@ -1,4 +1,8 @@
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { signIn } from 'next-auth/react'
+
+import ÌmageIntro from 'public/images/intro.png'
 import {
   Button,
   Container,
@@ -7,14 +11,16 @@ import {
   LoginBox,
   LoginContainer,
 } from './styles'
-import ÌmageIntro from 'public/images/intro.png'
-import { useRouter } from 'next/router'
 
 export default function Login() {
   const router = useRouter()
 
   async function handleNavigateToHome() {
     await router.push('/home')
+  }
+
+  async function handleLoginGithub() {
+    signIn('github')
   }
 
   return (
@@ -38,7 +44,7 @@ export default function Login() {
             />
             Entrar com Google
           </Button>
-          <Button>
+          <Button onClick={handleLoginGithub}>
             <Image
               src="/images/github-icon.png"
               width={32}
