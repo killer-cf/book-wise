@@ -3,9 +3,14 @@ import { ReactNode, useState } from 'react'
 import Image from 'next/image'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useSession } from 'next-auth/react'
+import { formatDistance } from 'date-fns'
 
 import { StarsReview } from '../StarsReview'
 import { Avatar } from '../Avatar'
+import { MyReviewForm } from '../MyReviewForm'
+import { LoginModal } from '../LoginModal'
+import { Book } from '@/pages/explorer/index.page'
 import {
   BookCard,
   BookDetails,
@@ -20,15 +25,14 @@ import {
   Subtitle,
   UserBox,
 } from './styles'
-import { MyReviewForm } from '../MyReviewForm'
-import { LoginModal } from '../LoginModal'
-import { useSession } from 'next-auth/react'
+import { ptBR } from 'date-fns/locale'
 
 interface ReviewDialogProps {
   children: ReactNode
+  bookData: Book
 }
 
-export function ReviewModal({ children }: ReviewDialogProps) {
+export function ReviewModal({ children, bookData }: ReviewDialogProps) {
   const [isFormReview, setIsFormReview] = useState(false)
   const session = useSession()
   const isAuthenticated = session.status === 'authenticated'
@@ -50,19 +54,24 @@ export function ReviewModal({ children }: ReviewDialogProps) {
                 <BookCard>
                   <div>
                     <Image
-                      src="/images/books/o-hobbit.png"
+                      src={bookData.cover_url}
                       alt=""
                       width={172}
                       height={242}
                     />
                     <BookDetails>
                       <div>
-                        <h2>O Hobbit</h2>
-                        <span>J.R.R. Tolkien</span>
+                        <h2>{bookData.name}</h2>
+                        <span>{bookData.author}</span>
                       </div>
                       <div>
-                        <StarsReview />
-                        <p>3 avaliações</p>
+                        <StarsReview rate={bookData.rate} />
+                        <p>
+                          {bookData.ratings.length}{' '}
+                          {bookData.ratings.length === 1
+                            ? 'avaliação'
+                            : 'avaliações'}
+                        </p>
                       </div>
                     </BookDetails>
                   </div>
@@ -71,7 +80,7 @@ export function ReviewModal({ children }: ReviewDialogProps) {
                       <BookmarkSimple size={32} />
                       <div>
                         <p>Categoria</p>
-                        <h4>Computação, educação</h4>
+                        <h4>{bookData.categories.join(', ')}</h4>
                       </div>
                     </Box>
 
@@ -79,7 +88,7 @@ export function ReviewModal({ children }: ReviewDialogProps) {
                       <BookOpen size={32} />
                       <div>
                         <p>Páginas</p>
-                        <h4>160</h4>
+                        <h4>{bookData.total_pages}</h4>
                       </div>
                     </Box>
                   </BookInfo>
@@ -108,41 +117,27 @@ export function ReviewModal({ children }: ReviewDialogProps) {
                   <MyReviewForm closeFormReview={closeFormReview} />
                 )}
                 <ReviewsList>
-                  <Review>
-                    <header>
-                      <UserBox>
-                        <Avatar size="sm" />
-                        <div>
-                          <strong>Jaxson Dias</strong>
-                          <p>Há 4 dias</p>
-                        </div>
-                      </UserBox>
-                      <StarsReview />
-                    </header>
-                    <p>
-                      Tristique massa sed enim lacinia odio. Congue ut faucibus
-                      nunc vitae non. Nam feugiat vel morbi viverra vitae mi.
-                      Vitae fringilla ut et suspendisse enim suspendisse vitae.
-                    </p>
-                  </Review>
-
-                  <Review>
-                    <header>
-                      <UserBox>
-                        <Avatar size="sm" />
-                        <div>
-                          <strong>Jaxson Dias</strong>
-                          <p>Há 4 dias</p>
-                        </div>
-                      </UserBox>
-                      <StarsReview />
-                    </header>
-                    <p>
-                      Tristique massa sed enim lacinia odio. Congue ut faucibus
-                      nunc vitae non. Nam feugiat vel morbi viverra vitae mi.
-                      Vitae fringilla ut et suspendisse enim suspendisse vitae.
-                    </p>
-                  </Review>
+                  {bookData.ratings.map((review) => (
+                    <Review key={review.id}>
+                      <header>
+                        <UserBox>
+                          <Avatar size="sm" />
+                          <div>
+                            <strong>{review.user.name}</strong>
+                            <p>
+                              {formatDistance(
+                                new Date(review.created_at),
+                                new Date(),
+                                { addSuffix: true, locale: ptBR },
+                              )}
+                            </p>
+                          </div>
+                        </UserBox>
+                        <StarsReview rate={review.rate} />
+                      </header>
+                      <p>{review.description}</p>
+                    </Review>
+                  ))}
                 </ReviewsList>
               </ContentWrapper>
             </ScrollArea.Viewport>

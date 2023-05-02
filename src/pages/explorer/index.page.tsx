@@ -20,8 +20,7 @@ import {
 } from './styles'
 import { GetStaticProps } from 'next'
 import { prisma } from '@/lib/prisma'
-
-interface Book {
+export interface Book {
   id: string
   name: string
   author: string
@@ -29,6 +28,18 @@ interface Book {
   summary: string
   total_pages: number
   rate: number
+  categories: string[]
+  ratings: {
+    id: string
+    description: string
+    rate: number
+    created_at: string
+    user: {
+      id: string
+      name: string
+      image: string
+    }
+  }[]
 }
 interface ExplorerProps {
   books: Book[]
@@ -74,7 +85,7 @@ export default function Explorer({ books }: ExplorerProps) {
         <Bookshelf>
           {books &&
             books.map((book: Book) => (
-              <ReviewModal key={book.id}>
+              <ReviewModal key={book.id} bookData={book}>
                 <BookCard>
                   <Image src={book.cover_url} alt="" width={108} height={152} />
                   <BookDetails>
@@ -95,13 +106,30 @@ export default function Explorer({ books }: ExplorerProps) {
 
 export const getStaticProps: GetStaticProps = async () => {
   const booksData = await prisma.book.findMany({
-    include: { ratings: true },
+    include: {
+      ratings: {
+        include: { user: { select: { id: true, name: true, image: true } } },
+      },
+      categories: { include: { category: true } },
+    },
   })
 
   const books = booksData.map((book) => {
     const rate =
       book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
       book.ratings.length
+
+    const ratings = book.ratings.map((rating) => {
+      return {
+        id: rating.id,
+        description: rating.description,
+        rate: rating.rate,
+        created_at: String(rating.created_at),
+        user: rating.user,
+      }
+    })
+
+    const categories = book.categories.map((category) => category.category.name)
 
     return {
       id: book.id,
@@ -110,10 +138,12 @@ export const getStaticProps: GetStaticProps = async () => {
       total_pages: book.total_pages,
       cover_url: book.cover_url,
       summary: book.summary,
+      categories,
+      ratings,
       rate,
     }
   })
-  console.log(books)
+  console.log(books[0].categories)
 
   return {
     props: { books },
