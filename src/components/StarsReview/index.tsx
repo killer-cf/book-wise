@@ -2,9 +2,13 @@ import { Star, StarHalf } from 'phosphor-react'
 import { Container } from './styles'
 import { useState } from 'react'
 
-export function StarsReview() {
+interface Props {
+  rate: number
+}
+
+export function StarsReview({ rate }: Props) {
   const totalStars = 5.0
-  const [activeStars, setActiveStars] = useState(4.5)
+  const [activeStars, setActiveStars] = useState(rate)
 
   return (
     <Container>

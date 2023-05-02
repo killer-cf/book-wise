@@ -18,10 +18,24 @@ import {
   BookDetails,
   SearchForm,
 } from './styles'
+import { GetStaticProps } from 'next'
+import { prisma } from '@/lib/prisma'
 
-export default function Explorer() {
+interface Book {
+  id: string
+  name: string
+  author: string
+  cover_url: string
+  summary: string
+  total_pages: number
+  rate: number
+}
+interface ExplorerProps {
+  books: Book[]
+}
+
+export default function Explorer({ books }: ExplorerProps) {
   const [filter, setFilter] = useState('Tudo')
-
   return (
     <Container>
       <SideBar />
@@ -58,121 +72,51 @@ export default function Explorer() {
         </Filters>
 
         <Bookshelf>
-          <ReviewModal>
-            <BookCard>
-              <Image
-                src="/images/books/o-hobbit.png"
-                alt=""
-                width={108}
-                height={152}
-              />
-              <BookDetails>
-                <div>
-                  <h2>O Hobbit</h2>
-                  <span>J.R.R. Tolkien</span>
-                </div>
-                <StarsReview />
-              </BookDetails>
-            </BookCard>
-          </ReviewModal>
-
-          <BookCard>
-            <Image
-              src="/images/books/o-hobbit.png"
-              alt=""
-              width={108}
-              height={152}
-            />
-            <BookDetails>
-              <div>
-                <h2>O Hobbit</h2>
-                <span>J.R.R. Tolkien</span>
-              </div>
-              <StarsReview />
-            </BookDetails>
-          </BookCard>
-
-          <BookCard>
-            <Image
-              src="/images/books/o-hobbit.png"
-              alt=""
-              width={108}
-              height={152}
-            />
-            <BookDetails>
-              <div>
-                <h2>O Hobbit</h2>
-                <span>J.R.R. Tolkien</span>
-              </div>
-              <StarsReview />
-            </BookDetails>
-          </BookCard>
-
-          <BookCard>
-            <Image
-              src="/images/books/o-hobbit.png"
-              alt=""
-              width={108}
-              height={152}
-            />
-            <BookDetails>
-              <div>
-                <h2>O Hobbit</h2>
-                <span>J.R.R. Tolkien</span>
-              </div>
-              <StarsReview />
-            </BookDetails>
-          </BookCard>
-
-          <BookCard>
-            <Image
-              src="/images/books/o-hobbit.png"
-              alt=""
-              width={108}
-              height={152}
-            />
-            <BookDetails>
-              <div>
-                <h2>O Hobbit</h2>
-                <span>J.R.R. Tolkien</span>
-              </div>
-              <StarsReview />
-            </BookDetails>
-          </BookCard>
-
-          <BookCard>
-            <Image
-              src="/images/books/o-hobbit.png"
-              alt=""
-              width={108}
-              height={152}
-            />
-            <BookDetails>
-              <div>
-                <h2>O Hobbit</h2>
-                <span>J.R.R. Tolkien</span>
-              </div>
-              <StarsReview />
-            </BookDetails>
-          </BookCard>
-
-          <BookCard>
-            <Image
-              src="/images/books/o-hobbit.png"
-              alt=""
-              width={108}
-              height={152}
-            />
-            <BookDetails>
-              <div>
-                <h2>O Hobbit</h2>
-                <span>J.R.R. Tolkien</span>
-              </div>
-              <StarsReview />
-            </BookDetails>
-          </BookCard>
+          {books &&
+            books.map((book: Book) => (
+              <ReviewModal key={book.id}>
+                <BookCard>
+                  <Image src={book.cover_url} alt="" width={108} height={152} />
+                  <BookDetails>
+                    <div>
+                      <h2>{book.name}</h2>
+                      <span>{book.author}</span>
+                    </div>
+                    <StarsReview rate={book.rate} />
+                  </BookDetails>
+                </BookCard>
+              </ReviewModal>
+            ))}
         </Bookshelf>
       </Content>
     </Container>
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const booksData = await prisma.book.findMany({
+    include: { ratings: true },
+  })
+
+  const books = booksData.map((book) => {
+    book.ratings.reduce((acc, rating) => {
+      acc = (acc + rating.rate) / 5
+      return acc
+    }, 0)
+
+    return {
+      id: book.id,
+      name: book.name,
+      author: book.author,
+      total_pages: book.total_pages,
+      cover_url: book.cover_url,
+      summary: book.summary,
+    }
+  })
+  console.log(books)
+
+  return {
+    props: { books },
+    revalidate: 60 * 60 * 24, // 1 dia
+  }
 }
