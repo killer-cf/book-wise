@@ -99,10 +99,9 @@ export const getStaticProps: GetStaticProps = async () => {
   })
 
   const books = booksData.map((book) => {
-    book.ratings.reduce((acc, rating) => {
-      acc = (acc + rating.rate) / 5
-      return acc
-    }, 0)
+    const rate =
+      book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
+      book.ratings.length
 
     return {
       id: book.id,
@@ -111,6 +110,7 @@ export const getStaticProps: GetStaticProps = async () => {
       total_pages: book.total_pages,
       cover_url: book.cover_url,
       summary: book.summary,
+      rate,
     }
   })
   console.log(books)
