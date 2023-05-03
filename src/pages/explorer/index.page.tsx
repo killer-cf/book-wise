@@ -8,6 +8,7 @@ import { StarsReview } from '@/components/StarsReview'
 import { SearchInput } from '@/components/SearchInput'
 import { SideBar } from '@/components/SideBar'
 import { ReviewModal } from '@/components/ReviewModal'
+import { api } from '@/lib/axios'
 import {
   Bookshelf,
   Container,
@@ -20,6 +21,18 @@ import {
   BookDetails,
   SearchForm,
 } from './styles'
+
+export type Rating = {
+  id: string
+  description: string
+  rate: number
+  created_at: string
+  user: {
+    id: string
+    name: string
+    image: string
+  }
+}
 export interface Book {
   id: string
   name: string
@@ -29,17 +42,6 @@ export interface Book {
   total_pages: number
   rate: number
   categories: string[]
-  ratings: {
-    id: string
-    description: string
-    rate: number
-    created_at: string
-    user: {
-      id: string
-      name: string
-      image: string
-    }
-  }[]
 }
 interface ExplorerProps {
   books: Book[]
@@ -47,6 +49,18 @@ interface ExplorerProps {
 
 export default function Explorer({ books }: ExplorerProps) {
   const [filter, setFilter] = useState('Tudo')
+  const [ratings, setRatings] = useState<Rating[]>([])
+
+  async function getReviewsByBook(bookId: string) {
+    const ratings = await api.get('/review', {
+      params: {
+        bookId,
+      },
+    })
+
+    setRatings(ratings.data)
+  }
+
   return (
     <Container>
       <SideBar />
@@ -83,21 +97,20 @@ export default function Explorer({ books }: ExplorerProps) {
         </Filters>
 
         <Bookshelf>
-          {books &&
-            books.map((book: Book) => (
-              <ReviewModal key={book.id} bookData={book}>
-                <BookCard>
-                  <Image src={book.cover_url} alt="" width={108} height={152} />
-                  <BookDetails>
-                    <div>
-                      <h2>{book.name}</h2>
-                      <span>{book.author}</span>
-                    </div>
-                    <StarsReview rate={book.rate} />
-                  </BookDetails>
-                </BookCard>
-              </ReviewModal>
-            ))}
+          {books.map((book: Book) => (
+            <ReviewModal key={book.id} bookData={book} ratings={ratings}>
+              <BookCard onClick={() => getReviewsByBook(book.id)}>
+                <Image src={book.cover_url} alt="" width={108} height={152} />
+                <BookDetails>
+                  <div>
+                    <h2>{book.name}</h2>
+                    <span>{book.author}</span>
+                  </div>
+                  <StarsReview rate={book.rate} />
+                </BookDetails>
+              </BookCard>
+            </ReviewModal>
+          ))}
         </Bookshelf>
       </Content>
     </Container>
@@ -107,9 +120,7 @@ export default function Explorer({ books }: ExplorerProps) {
 export const getStaticProps: GetStaticProps = async () => {
   const booksData = await prisma.book.findMany({
     include: {
-      ratings: {
-        include: { user: { select: { id: true, name: true, image: true } } },
-      },
+      ratings: true,
       categories: { include: { category: true } },
     },
   })
@@ -118,16 +129,6 @@ export const getStaticProps: GetStaticProps = async () => {
     const rate =
       book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
       book.ratings.length
-
-    const ratings = book.ratings.map((rating) => {
-      return {
-        id: rating.id,
-        description: rating.description,
-        rate: rating.rate,
-        created_at: String(rating.created_at),
-        user: rating.user,
-      }
-    })
 
     const categories = book.categories.map((category) => category.category.name)
 
@@ -139,7 +140,6 @@ export const getStaticProps: GetStaticProps = async () => {
       cover_url: book.cover_url,
       summary: book.summary,
       categories,
-      ratings,
       rate,
     }
   })

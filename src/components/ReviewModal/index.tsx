@@ -11,7 +11,7 @@ import { StarsReview } from '../StarsReview'
 import { Avatar } from '../Avatar'
 import { MyReviewForm } from '../MyReviewForm'
 import { LoginModal } from '../LoginModal'
-import { Book } from '@/pages/explorer/index.page'
+import { Book, Rating } from '@/pages/explorer/index.page'
 import {
   BookCard,
   BookDetails,
@@ -30,9 +30,14 @@ import {
 interface ReviewDialogProps {
   children: ReactNode
   bookData: Book
+  ratings: Rating[]
 }
 
-export function ReviewModal({ children, bookData }: ReviewDialogProps) {
+export function ReviewModal({
+  children,
+  bookData,
+  ratings,
+}: ReviewDialogProps) {
   const [isFormReview, setIsFormReview] = useState(false)
   const session = useSession()
   const isAuthenticated = session.status === 'authenticated'
@@ -67,10 +72,8 @@ export function ReviewModal({ children, bookData }: ReviewDialogProps) {
                       <div>
                         <StarsReview rate={bookData.rate} />
                         <p>
-                          {bookData.ratings.length}{' '}
-                          {bookData.ratings.length === 1
-                            ? 'avaliação'
-                            : 'avaliações'}
+                          {ratings.length}{' '}
+                          {ratings.length === 1 ? 'avaliação' : 'avaliações'}
                         </p>
                       </div>
                     </BookDetails>
@@ -120,27 +123,28 @@ export function ReviewModal({ children, bookData }: ReviewDialogProps) {
                   />
                 )}
                 <ReviewsList>
-                  {bookData.ratings.map((review) => (
-                    <Review key={review.id}>
-                      <header>
-                        <UserBox>
-                          <Avatar size="sm" src={review.user.image} />
-                          <div>
-                            <strong>{review.user.name}</strong>
-                            <p>
-                              {formatDistance(
-                                new Date(review.created_at),
-                                new Date(),
-                                { addSuffix: true, locale: ptBR },
-                              )}
-                            </p>
-                          </div>
-                        </UserBox>
-                        <StarsReview rate={review.rate} />
-                      </header>
-                      <p>{review.description}</p>
-                    </Review>
-                  ))}
+                  {ratings &&
+                    ratings.map((review) => (
+                      <Review key={review.id}>
+                        <header>
+                          <UserBox>
+                            <Avatar size="sm" src={review.user.image} />
+                            <div>
+                              <strong>{review.user.name}</strong>
+                              <p>
+                                {formatDistance(
+                                  new Date(review.created_at),
+                                  new Date(),
+                                  { addSuffix: true, locale: ptBR },
+                                )}
+                              </p>
+                            </div>
+                          </UserBox>
+                          <StarsReview rate={review.rate} />
+                        </header>
+                        <p>{review.description}</p>
+                      </Review>
+                    ))}
                 </ReviewsList>
               </ContentWrapper>
             </ScrollArea.Viewport>
