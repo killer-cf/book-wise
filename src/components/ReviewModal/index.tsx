@@ -5,6 +5,7 @@ import * as ScrollArea from '@radix-ui/react-scroll-area'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useSession } from 'next-auth/react'
 import { formatDistance } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 import { StarsReview } from '../StarsReview'
 import { Avatar } from '../Avatar'
@@ -25,7 +26,6 @@ import {
   Subtitle,
   UserBox,
 } from './styles'
-import { ptBR } from 'date-fns/locale'
 
 interface ReviewDialogProps {
   children: ReactNode
@@ -121,7 +121,7 @@ export function ReviewModal({ children, bookData }: ReviewDialogProps) {
                     <Review key={review.id}>
                       <header>
                         <UserBox>
-                          <Avatar size="sm" />
+                          <Avatar size="sm" src={review.user.image} />
                           <div>
                             <strong>{review.user.name}</strong>
                             <p>

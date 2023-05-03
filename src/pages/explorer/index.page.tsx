@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Binoculars } from 'phosphor-react'
 import Image from 'next/image'
+import { GetStaticProps } from 'next'
 
+import { prisma } from '@/lib/prisma'
 import { StarsReview } from '@/components/StarsReview'
 import { SearchInput } from '@/components/SearchInput'
 import { SideBar } from '@/components/SideBar'
@@ -18,8 +20,6 @@ import {
   BookDetails,
   SearchForm,
 } from './styles'
-import { GetStaticProps } from 'next'
-import { prisma } from '@/lib/prisma'
 export interface Book {
   id: string
   name: string
@@ -143,7 +143,6 @@ export const getStaticProps: GetStaticProps = async () => {
       rate,
     }
   })
-  console.log(books[0].categories)
 
   return {
     props: { books },
