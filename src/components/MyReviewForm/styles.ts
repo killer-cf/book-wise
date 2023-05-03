@@ -18,7 +18,7 @@ export const Container = styled('form', {
     alignItems: 'flex-start',
   },
 
-  p: {
+  '> p': {
     display: 'block',
     position: 'absolute',
     top: '13.85rem',
@@ -38,12 +38,6 @@ export const Container = styled('form', {
     color: '$gray200',
     fontSize: '$sm',
     lineHeight: '$base',
-  },
-
-  '> div': {
-    display: 'flex',
-    justifyContent: 'end',
-    gap: '$2',
   },
 })
 
@@ -90,5 +84,17 @@ export const Button = styled('button', {
       green: { color: '$green100' },
       purple: { color: '$purple100' },
     },
+  },
+})
+
+export const ButtonsAndErrors = styled('div', {
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '$2',
+
+  p: {
+    color: '#f75a68',
+    lineHeight: '$base',
+    fontSize: '$sm',
   },
 })

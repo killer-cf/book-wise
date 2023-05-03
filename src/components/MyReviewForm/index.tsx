@@ -1,8 +1,30 @@
 import { Check, Star, X } from 'phosphor-react'
 import { Avatar } from '../Avatar'
-import { Button, Container, StarsHate, UserBox } from './styles'
+import {
+  Button,
+  ButtonsAndErrors,
+  Container,
+  StarsHate,
+  UserBox,
+} from './styles'
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+const myReviewFormSchema = z.object({
+  rate: z
+    .number()
+    .min(1, { message: 'Nota minima deve ser 1' })
+    .max(5, { message: 'Avaliação invalida' }),
+  description: z
+    .string()
+    .min(5, { message: 'Escreva um mínimo de 5 caracteres' })
+    .max(450, { message: 'Você ultrapassou o máximo de caracteres' }),
+})
+
+type MyReviewFormData = z.infer<typeof myReviewFormSchema>
 
 interface MyReviewFormProps {
   closeFormReview: () => void
@@ -12,11 +34,27 @@ export function MyReviewForm({ closeFormReview }: MyReviewFormProps) {
   const totalStars = 5.0
   const [activeStars, setActiveStars] = useState(0)
 
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<MyReviewFormData>({
+    resolver: zodResolver(myReviewFormSchema),
+    defaultValues: {
+      rate: activeStars,
+    },
+  })
+
   const session = useSession()
   const user = session.data?.user
 
+  async function handleSendForm(data: MyReviewFormData) {
+    console.log('data >>>', data)
+  }
+
   return (
-    <Container>
+    <Container onSubmit={handleSubmit(handleSendForm)}>
       <header>
         <UserBox>
           <Avatar size="sm" src={user?.image!} />
@@ -26,7 +64,10 @@ export function MyReviewForm({ closeFormReview }: MyReviewFormProps) {
           {[...Array(totalStars)].map((_, index) => (
             <button
               type="button"
-              onClick={() => setActiveStars(index + 1)}
+              onClick={() => {
+                setActiveStars(index + 1)
+                setValue('rate', index + 1, { shouldValidate: true })
+              }}
               key={index}
             >
               {index + 1 <= activeStars ? (
@@ -38,16 +79,22 @@ export function MyReviewForm({ closeFormReview }: MyReviewFormProps) {
           ))}
         </StarsHate>
       </header>
-      <textarea />
+      <textarea {...register('description')} />
       <p>0/450</p>
-      <div>
-        <Button type="button" onClick={closeFormReview} color="purple">
-          <X size={24} />
-        </Button>
-        <Button type="submit" color="green">
-          <Check size={24} />
-        </Button>
-      </div>
+      <ButtonsAndErrors>
+        <div>
+          <p>{errors.description ? errors.description.message : ''}</p>
+          <p>{errors.rate ? errors.rate.message : ''}</p>
+        </div>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <Button type="button" onClick={closeFormReview} color="purple">
+            <X size={24} />
+          </Button>
+          <Button type="submit" color="green" disabled={isSubmitting}>
+            <Check size={24} />
+          </Button>
+        </div>
+      </ButtonsAndErrors>
     </Container>
   )
 }
