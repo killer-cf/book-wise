@@ -12,6 +12,7 @@ import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { api } from '@/lib/axios'
 
 const myReviewFormSchema = z.object({
   rate: z
@@ -28,9 +29,10 @@ type MyReviewFormData = z.infer<typeof myReviewFormSchema>
 
 interface MyReviewFormProps {
   closeFormReview: () => void
+  bookId: string
 }
 
-export function MyReviewForm({ closeFormReview }: MyReviewFormProps) {
+export function MyReviewForm({ closeFormReview, bookId }: MyReviewFormProps) {
   const totalStars = 5.0
   const [activeStars, setActiveStars] = useState(0)
 
@@ -50,7 +52,16 @@ export function MyReviewForm({ closeFormReview }: MyReviewFormProps) {
   const user = session.data?.user
 
   async function handleSendForm(data: MyReviewFormData) {
-    console.log('data >>>', data)
+    try {
+      await api.post('/review', {
+        rate: data.rate,
+        description: data.description,
+        bookId,
+      })
+      closeFormReview()
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (

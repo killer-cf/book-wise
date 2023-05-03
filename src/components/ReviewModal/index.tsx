@@ -114,7 +114,10 @@ export function ReviewModal({ children, bookData }: ReviewDialogProps) {
                   )}
                 </Subtitle>
                 {isFormReview && (
-                  <MyReviewForm closeFormReview={closeFormReview} />
+                  <MyReviewForm
+                    closeFormReview={closeFormReview}
+                    bookId={bookData.id}
+                  />
                 )}
                 <ReviewsList>
                   {bookData.ratings.map((review) => (
