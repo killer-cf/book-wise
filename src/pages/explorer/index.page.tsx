@@ -98,7 +98,12 @@ export default function Explorer({ books }: ExplorerProps) {
 
         <Bookshelf>
           {books.map((book: Book) => (
-            <ReviewModal key={book.id} bookData={book} ratings={ratings}>
+            <ReviewModal
+              key={book.id}
+              bookData={book}
+              ratings={ratings}
+              getRatings={getReviewsByBook}
+            >
               <BookCard onClick={() => getReviewsByBook(book.id)}>
                 <Image src={book.cover_url} alt="" width={108} height={152} />
                 <BookDetails>

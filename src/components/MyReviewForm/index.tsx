@@ -29,10 +29,15 @@ type MyReviewFormData = z.infer<typeof myReviewFormSchema>
 
 interface MyReviewFormProps {
   closeFormReview: () => void
+  getRatings: (bookId: string) => Promise<void>
   bookId: string
 }
 
-export function MyReviewForm({ closeFormReview, bookId }: MyReviewFormProps) {
+export function MyReviewForm({
+  closeFormReview,
+  bookId,
+  getRatings,
+}: MyReviewFormProps) {
   const totalStars = 5.0
   const [activeStars, setActiveStars] = useState(0)
 
@@ -59,6 +64,7 @@ export function MyReviewForm({ closeFormReview, bookId }: MyReviewFormProps) {
         bookId,
       })
       closeFormReview()
+      getRatings(bookId)
     } catch (err) {
       console.log(err)
     }

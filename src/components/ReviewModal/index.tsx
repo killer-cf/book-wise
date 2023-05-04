@@ -31,12 +31,14 @@ interface ReviewDialogProps {
   children: ReactNode
   bookData: Book
   ratings: Rating[]
+  getRatings: (bookId: string) => Promise<void>
 }
 
 export function ReviewModal({
   children,
   bookData,
   ratings,
+  getRatings,
 }: ReviewDialogProps) {
   const [isFormReview, setIsFormReview] = useState(false)
   const session = useSession()
@@ -118,6 +120,7 @@ export function ReviewModal({
                 </Subtitle>
                 {isFormReview && (
                   <MyReviewForm
+                    getRatings={getRatings}
                     closeFormReview={closeFormReview}
                     bookId={bookData.id}
                   />
