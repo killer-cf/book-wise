@@ -22,10 +22,42 @@ import {
   Subtitle,
   UserBox,
 } from './styles'
+import { GetServerSideProps } from 'next'
+import { prisma } from '@/lib/prisma'
 
-export default function Home() {
+type Review = {
+  id: string
+  rate: number
+  description: string
+  created_at: string
+  user: {
+    id: string
+    name: string
+    image: string | null
+  }
+  book: {
+    id: string
+    cover_url: string
+    name: string
+    author: string
+  }
+}
+
+export type Book = {
+  id: string
+  name: string
+  author: string
+  cover_url: string
+  rate: number
+}
+
+interface HomeProps {
+  recentReviews: Review[]
+  spotlight: Book[]
+}
+
+export default function Home({ recentReviews, spotlight }: HomeProps) {
   const session = useSession()
-  console.log(session)
 
   return (
     <Container>
@@ -73,71 +105,34 @@ export default function Home() {
               <Subtitle>
                 <h3>Avaliações mais recentes</h3>
               </Subtitle>
-              <BoxRecentReviews>
-                <header>
-                  <UserBox>
-                    <Avatar size="sm" />
+              {recentReviews.map((review) => (
+                <BoxRecentReviews key={review.id}>
+                  <header>
+                    <UserBox>
+                      <Avatar src={review.user.image ?? ''} size="sm" />
+                      <div>
+                        <strong>{review.user.name}</strong>
+                        <p>Hoje</p>
+                      </div>
+                    </UserBox>
+                    <StarsReview rate={review.rate} />
+                  </header>
+                  <BookDetails>
+                    <Image
+                      src={review.book.cover_url}
+                      alt=""
+                      width={108}
+                      height={152}
+                    />
                     <div>
-                      <strong>Jaxson Dias</strong>
-                      <p>Hoje</p>
+                      <h2>{review.book.name}</h2>
+                      <span>{review.book.author}</span>
+
+                      <p>{review.description}</p>
                     </div>
-                  </UserBox>
-                  <StarsReview />
-                </header>
-                <BookDetails>
-                  <Image
-                    src="/images/books/o-hobbit.png"
-                    alt=""
-                    width={108}
-                    height={152}
-                  />
-                  <div>
-                    <h2>O Hobbit</h2>
-                    <span>J.R.R. Tolkien</span>
-
-                    <p>
-                      Semper et sapien proin vitae nisi. Feugiat neque integer
-                      donec et aenean posuere amet ultrices. Cras fermentum id
-                      pulvinar varius leo a in. Amet libero pharetra nunc
-                      elementum fringilla velit ipsum. Sed vulputate massa velit
-                      nibh... ver mais
-                    </p>
-                  </div>
-                </BookDetails>
-              </BoxRecentReviews>
-
-              <BoxRecentReviews>
-                <header>
-                  <UserBox>
-                    <Avatar size="sm" />
-                    <div>
-                      <strong>Jaxson Dias</strong>
-                      <p>Hoje</p>
-                    </div>
-                  </UserBox>
-                  <StarsReview />
-                </header>
-                <BookDetails>
-                  <Image
-                    src="/images/books/o-hobbit.png"
-                    alt=""
-                    width={108}
-                    height={152}
-                  />
-                  <div>
-                    <h2>O Hobbit</h2>
-                    <span>J.R.R. Tolkien</span>
-
-                    <p>
-                      Semper et sapien proin vitae nisi. Feugiat neque integer
-                      donec et aenean posuere amet ultrices. Cras fermentum id
-                      pulvinar varius leo a in. Amet libero pharetra nunc
-                      elementum fringilla velit ipsum. Sed vulputate massa velit
-                      nibh... ver mais
-                    </p>
-                  </div>
-                </BookDetails>
-              </BoxRecentReviews>
+                  </BookDetails>
+                </BoxRecentReviews>
+              ))}
             </RecentReviews>
           </Feed>
           <Spotlight>
@@ -148,13 +143,62 @@ export default function Home() {
               </Link>
             </Subtitle>
 
-            <BookCard />
-            <BookCard />
-            <BookCard />
-            <BookCard />
+            {spotlight.map((book) => (
+              <BookCard key={book.id} book={book} />
+            ))}
           </Spotlight>
         </Bookshelf>
       </Content>
     </Container>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const recentReviewsData = await prisma.rating.findMany({
+    select: {
+      id: true,
+      rate: true,
+      description: true,
+      created_at: true,
+      user: { select: { name: true, image: true, id: true } },
+      book: { select: { name: true, cover_url: true, id: true, author: true } },
+    },
+    orderBy: { created_at: 'desc' },
+  })
+
+  const recentReviews: Review[] = recentReviewsData.map((review) => {
+    return {
+      ...review,
+      created_at: String(review.created_at),
+    }
+  })
+
+  const spotlightData = await prisma.book.findMany({
+    include: { ratings: true },
+    orderBy: {
+      ratings: { _count: 'desc' },
+    },
+    take: 4,
+  })
+
+  const spotlight: Book[] = spotlightData.map((book) => {
+    const rate =
+      book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
+      book.ratings.length
+
+    return {
+      id: book.id,
+      name: book.name,
+      author: book.author,
+      cover_url: book.cover_url,
+      rate,
+    }
+  })
+
+  return {
+    props: {
+      recentReviews,
+      spotlight,
+    },
+  }
 }

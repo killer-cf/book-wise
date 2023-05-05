@@ -1,17 +1,22 @@
 import Image from 'next/image'
 import { BookDetails, Container } from './styles'
 import { StarsReview } from '../StarsReview'
+import { Book } from '@/pages/home/index.page'
 
-export function BookCard() {
+interface BookCardProps {
+  book: Book
+}
+
+export function BookCard({ book }: BookCardProps) {
   return (
     <Container>
-      <Image src="/images/books/o-hobbit.png" alt="" width={64} height={94} />
+      <Image src={book.cover_url} alt="" width={64} height={94} />
       <BookDetails>
         <div>
-          <h2>O Hobbit</h2>
-          <span>J.R.R. Tolkien</span>
+          <h2>{book.name}</h2>
+          <span>{book.author}</span>
         </div>
-        <StarsReview />
+        <StarsReview rate={book.rate} />
       </BookDetails>
     </Container>
   )
