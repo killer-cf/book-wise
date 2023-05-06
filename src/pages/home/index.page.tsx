@@ -1,7 +1,14 @@
+import { GetServerSideProps } from 'next'
+import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useSession } from 'next-auth/react'
+// import { useSession } from 'next-auth/react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
+
+import { prisma } from '@/lib/prisma'
+import { formatDistanceToNow } from '@/utils/formatDistanceToNow'
+import { authOptions } from '../api/auth/[...nextauth].api'
+import calcBookRate from '@/utils/calcBookRate'
 
 import { SideBar } from '@/components/SideBar'
 import { Avatar } from '@/components/Avatar'
@@ -20,11 +27,9 @@ import {
   RecentReviews,
   Spotlight,
   Subtitle,
+  Summary,
   UserBox,
 } from './styles'
-import { GetServerSideProps } from 'next'
-import { prisma } from '@/lib/prisma'
-import { formatDistanceToNow } from '@/utils/formatDistanceToNow'
 
 type Review = {
   id: string
@@ -49,16 +54,23 @@ export type Book = {
   name: string
   author: string
   cover_url: string
+  created_at: string
+  summary: string
   rate: number
 }
 
 interface HomeProps {
   recentReviews: Review[]
   spotlight: Book[]
+  lastReading: Book
 }
 
-export default function Home({ recentReviews, spotlight }: HomeProps) {
-  const session = useSession()
+export default function Home({
+  recentReviews,
+  spotlight,
+  lastReading,
+}: HomeProps) {
+  // const session = useSession()
 
   return (
     <Container>
@@ -87,18 +99,15 @@ export default function Home({ recentReviews, spotlight }: HomeProps) {
                 />
                 <div style={{ flex: 1 }}>
                   <header>
-                    <p>Há 2 dias</p>
-                    <StarsReview />
+                    <p>{formatDistanceToNow(lastReading.created_at)}</p>
+                    <StarsReview rate={lastReading.rate} />
                   </header>
 
-                  <h2>Entendendo Algoritmos</h2>
-                  <span>Aditya Bhargava</span>
-
-                  <p>
-                    Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                    sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                    lectu...
-                  </p>
+                  <h2>{lastReading.name}</h2>
+                  <span>{lastReading.author}</span>
+                  <Summary>
+                    <p>{lastReading.summary}</p>
+                  </Summary>
                 </div>
               </BoxLastReading>
             </RecentReading>
@@ -154,7 +163,40 @@ export default function Home({ recentReviews, spotlight }: HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const session = await getServerSession(req, res, authOptions)
+
+  let lastReading = null
+  if (session?.user) {
+    const lastReadingUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        ratings: {
+          orderBy: { created_at: 'desc' },
+          take: 1,
+          select: {
+            book: {
+              include: { ratings: true },
+            },
+          },
+        },
+      },
+    })
+
+    if (lastReadingUser) {
+      const book = lastReadingUser.ratings[0].book
+      lastReading = {
+        id: book.id,
+        name: book.name,
+        author: book.author,
+        cover_url: book.cover_url,
+        summary: book.summary,
+        created_at: String(new Date(book.created_at)),
+        rate: calcBookRate(book.ratings.map((book) => book.rate)),
+      }
+    }
+  }
+
   const recentReviewsData = await prisma.rating.findMany({
     select: {
       id: true,
@@ -183,16 +225,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
   })
 
   const spotlight: Book[] = spotlightData.map((book) => {
-    const rate =
-      book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
-      book.ratings.length
-
     return {
       id: book.id,
       name: book.name,
       author: book.author,
       cover_url: book.cover_url,
-      rate,
+      summary: book.summary,
+      created_at: String(book.created_at),
+      rate: calcBookRate(book.ratings.map((book) => book.rate)),
     }
   })
 
@@ -200,6 +240,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     props: {
       recentReviews,
       spotlight,
+      lastReading,
     },
   }
 }
