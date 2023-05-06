@@ -4,14 +4,13 @@ import Image from 'next/image'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useSession } from 'next-auth/react'
-import { formatDistance } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
 
 import { StarsReview } from '../StarsReview'
 import { Avatar } from '../Avatar'
 import { MyReviewForm } from '../MyReviewForm'
 import { LoginModal } from '../LoginModal'
 import { Book, Rating } from '@/pages/explorer/index.page'
+import { formatDistanceToNow } from '@/utils/formatDistanceToNow'
 import {
   BookCard,
   BookDetails,
@@ -134,13 +133,7 @@ export function ReviewModal({
                             <Avatar size="sm" src={review.user.image} />
                             <div>
                               <strong>{review.user.name}</strong>
-                              <p>
-                                {formatDistance(
-                                  new Date(review.created_at),
-                                  new Date(),
-                                  { addSuffix: true, locale: ptBR },
-                                )}
-                              </p>
+                              <p>{formatDistanceToNow(review.created_at)}</p>
                             </div>
                           </UserBox>
                           <StarsReview rate={review.rate} />

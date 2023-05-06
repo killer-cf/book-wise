@@ -24,6 +24,7 @@ import {
 } from './styles'
 import { GetServerSideProps } from 'next'
 import { prisma } from '@/lib/prisma'
+import { formatDistanceToNow } from '@/utils/formatDistanceToNow'
 
 type Review = {
   id: string
@@ -112,7 +113,7 @@ export default function Home({ recentReviews, spotlight }: HomeProps) {
                       <Avatar src={review.user.image ?? ''} size="sm" />
                       <div>
                         <strong>{review.user.name}</strong>
-                        <p>Hoje</p>
+                        <p>{formatDistanceToNow(review.created_at)}</p>
                       </div>
                     </UserBox>
                     <StarsReview rate={review.rate} />
