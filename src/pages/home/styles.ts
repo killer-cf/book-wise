@@ -89,6 +89,7 @@ export const Subtitle = styled('div', {
 
 export const RecentReading = styled('section', {
   flex: 1,
+  paddingBottom: '$10',
 })
 
 export const BoxLastReading = styled('div', {
@@ -149,7 +150,7 @@ export const Summary = styled('div', {
 })
 
 export const RecentReviews = styled('section', {
-  paddingTop: '$10',
+  paddingBottom: '$10',
 })
 
 export const BoxRecentReviews = styled('div', {

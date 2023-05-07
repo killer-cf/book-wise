@@ -82,35 +82,37 @@ export default function Home({
         </Header>
         <Bookshelf>
           <Feed>
-            <RecentReading>
-              <Subtitle>
-                <h3>Sua última leitura</h3>
-                <Link href="">
-                  Ver todas <CaretRight />
-                </Link>
-              </Subtitle>
+            {lastReading && (
+              <RecentReading>
+                <Subtitle>
+                  <h3>Sua última leitura</h3>
+                  <Link href="">
+                    Ver todas <CaretRight />
+                  </Link>
+                </Subtitle>
 
-              <BoxLastReading>
-                <Image
-                  src="/images/books/entendendo-algoritmos.png"
-                  alt=""
-                  width={108}
-                  height={152}
-                />
-                <div style={{ flex: 1 }}>
-                  <header>
-                    <p>{formatDistanceToNow(lastReading.created_at)}</p>
-                    <StarsReview rate={lastReading.rate} />
-                  </header>
+                <BoxLastReading>
+                  <Image
+                    src="/images/books/entendendo-algoritmos.png"
+                    alt=""
+                    width={108}
+                    height={152}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <header>
+                      <p>{formatDistanceToNow(lastReading.created_at)}</p>
+                      <StarsReview rate={lastReading.rate} />
+                    </header>
 
-                  <h2>{lastReading.name}</h2>
-                  <span>{lastReading.author}</span>
-                  <Summary>
-                    <p>{lastReading.summary}</p>
-                  </Summary>
-                </div>
-              </BoxLastReading>
-            </RecentReading>
+                    <h2>{lastReading.name}</h2>
+                    <span>{lastReading.author}</span>
+                    <Summary>
+                      <p>{lastReading.summary}</p>
+                    </Summary>
+                  </div>
+                </BoxLastReading>
+              </RecentReading>
+            )}
             <RecentReviews>
               <Subtitle>
                 <h3>Avaliações mais recentes</h3>
