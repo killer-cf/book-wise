@@ -1,9 +1,10 @@
 import { styled } from '../../../stitches.config'
 
-export const Container = styled('div', {
+export const Container = styled('button', {
   backgroundColor: '$gray700',
   display: 'flex',
   maxWidth: '20.25rem',
+  border: '2px solid transparent',
   marginBottom: '$5',
   padding: '$4 $5',
   borderRadius: '$md',
@@ -18,6 +19,7 @@ export const Container = styled('div', {
     color: '$gray100',
     fontSize: '$md',
     lineHeight: '$base',
+    textAlign: 'left',
   },
 
   span: {
@@ -33,4 +35,11 @@ export const BookDetails = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
+  alignItems: 'start',
+
+  '.description': {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
 })

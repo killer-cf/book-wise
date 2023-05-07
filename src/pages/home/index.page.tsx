@@ -54,9 +54,10 @@ export type Book = {
   name: string
   author: string
   cover_url: string
-  created_at: string
   summary: string
+  total_pages: number
   rate: number
+  categories: string[]
 }
 
 interface HomeProps {
@@ -86,7 +87,7 @@ export default function Home({
               <RecentReading>
                 <Subtitle>
                   <h3>Sua última leitura</h3>
-                  <Link href="">
+                  <Link href="/profile">
                     Ver todas <CaretRight />
                   </Link>
                 </Subtitle>
@@ -150,14 +151,16 @@ export default function Home({
           <Spotlight>
             <Subtitle>
               <h3>Destaques</h3>
-              <Link href="">
+              <Link href="/explorer">
                 Ver todos <CaretRight />
               </Link>
             </Subtitle>
 
-            {spotlight.map((book) => (
-              <BookCard key={book.id} book={book} />
-            ))}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {spotlight.map((book) => (
+                <BookCard key={book.id} book={book} />
+              ))}
+            </div>
           </Spotlight>
         </Bookshelf>
       </Content>
@@ -219,7 +222,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   })
 
   const spotlightData = await prisma.book.findMany({
-    include: { ratings: true },
+    include: { ratings: true, categories: { include: { category: true } } },
     orderBy: {
       ratings: { _count: 'desc' },
     },
@@ -227,12 +230,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   })
 
   const spotlight: Book[] = spotlightData.map((book) => {
+    const categories = book.categories.map((category) => category.category.name)
+
     return {
       id: book.id,
       name: book.name,
       author: book.author,
       cover_url: book.cover_url,
+      total_pages: book.total_pages,
       summary: book.summary,
+      categories,
       created_at: String(book.created_at),
       rate: calcBookRate(book.ratings.map((book) => book.rate)),
     }
