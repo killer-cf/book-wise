@@ -10,6 +10,7 @@ export const Container = styled('button', {
   borderRadius: '$md',
   gap: '$5',
   alignItems: 'stretch',
+  cursor: 'pointer',
 
   '@media screen and (max-width: 1024px)': {
     marginBottom: 0,
@@ -28,6 +29,10 @@ export const Container = styled('button', {
     fontSize: '$sm',
     lineHeight: '$base',
     marginBottom: '$3',
+  },
+
+  '&:hover': {
+    border: '2px solid $gray500',
   },
 })
 
