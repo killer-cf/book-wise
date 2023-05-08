@@ -46,7 +46,7 @@ export const Title = styled('header', {
   },
 })
 
-export const SearchForm = styled('form', {
+export const SearchForm = styled('div', {
   width: '27rem',
 
   '@media screen and (max-width: 1024px)': {

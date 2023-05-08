@@ -57,6 +57,7 @@ export default function Explorer({ books, categories }: ExplorerProps) {
   const [filter, setFilter] = useState('Tudo')
   const [filteredBooks, setFilteredBooks] = useState(![] || books)
   const [ratings, setRatings] = useState<Rating[]>([])
+  const [searchValue, setSearchValue] = useState('')
 
   async function getReviewsByBook(bookId: string) {
     const ratings = await api.get('/review', {
@@ -69,7 +70,12 @@ export default function Explorer({ books, categories }: ExplorerProps) {
   }
 
   async function filterFetch(category: string) {
-    const filteredBooks = await api.get(`/books/${category}`)
+    const filteredBooks = await api.get('/books', {
+      params: {
+        category,
+        input: '',
+      },
+    })
     setFilteredBooks(filteredBooks.data.books)
   }
 
@@ -83,6 +89,17 @@ export default function Explorer({ books, categories }: ExplorerProps) {
     setFilteredBooks(books)
   }
 
+  async function submitSearch() {
+    const response = await api.get('/books', {
+      params: {
+        category: filter,
+        input: searchValue,
+      },
+    })
+
+    setFilteredBooks(response.data.books)
+  }
+
   return (
     <Container>
       <SideBar />
@@ -93,7 +110,12 @@ export default function Explorer({ books, categories }: ExplorerProps) {
             <h1>Explorar</h1>
           </Title>
           <SearchForm>
-            <SearchInput placeholder="Buscar livro ou autor" />
+            <SearchInput
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Buscar livro ou autor"
+              onClickSearch={submitSearch}
+            />
           </SearchForm>
         </Header>
 

@@ -4,13 +4,18 @@ import { ComponentProps } from 'react'
 
 interface SearchInputProps extends ComponentProps<typeof Input> {
   disabled?: boolean
+  onClickSearch: () => void
 }
 
-export function SearchInput({ onClick, disabled, ...props }: SearchInputProps) {
+export function SearchInput({
+  onClickSearch,
+  disabled,
+  ...props
+}: SearchInputProps) {
   return (
     <Container>
-      <Input {...props} />
-      <ButtonSubmit type="submit" disabled={disabled}>
+      <Input type="text" {...props} />
+      <ButtonSubmit type="button" onClick={onClickSearch} disabled={disabled}>
         <MagnifyingGlass size={20} />
       </ButtonSubmit>
     </Container>
