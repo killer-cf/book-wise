@@ -43,12 +43,19 @@ export interface Book {
   rate: number
   categories: string[]
 }
+
+export interface Category {
+  id: string
+  name: string
+}
 interface ExplorerProps {
   books: Book[]
+  categories: Category[]
 }
 
-export default function Explorer({ books }: ExplorerProps) {
+export default function Explorer({ books, categories }: ExplorerProps) {
   const [filter, setFilter] = useState('Tudo')
+  const [filteredBooks, setFilteredBooks] = useState(![] || books)
   const [ratings, setRatings] = useState<Rating[]>([])
 
   async function getReviewsByBook(bookId: string) {
@@ -59,6 +66,21 @@ export default function Explorer({ books }: ExplorerProps) {
     })
 
     setRatings(ratings.data)
+  }
+
+  async function filterFetch(category: string) {
+    const filteredBooks = await api.get(`/books/${category}`)
+    setFilteredBooks(filteredBooks.data.books)
+  }
+
+  async function handleFilterBooks(category: string) {
+    setFilter(category)
+    filterFetch(category)
+  }
+
+  function handleRemoveFilter() {
+    setFilter('Tudo')
+    setFilteredBooks(books)
   }
 
   return (
@@ -78,26 +100,25 @@ export default function Explorer({ books }: ExplorerProps) {
         <Filters>
           <FilterButton
             variant={filter === 'Tudo' ? 'selected' : 'unselected'}
-            onClick={() => setFilter('Tudo')}
+            onClick={handleRemoveFilter}
           >
             Tudo
           </FilterButton>
-          <FilterButton
-            variant={filter === 'Computação' ? 'selected' : 'unselected'}
-            onClick={() => setFilter('Computação')}
-          >
-            Computação
-          </FilterButton>
-          <FilterButton
-            variant={filter === 'Educação' ? 'selected' : 'unselected'}
-            onClick={() => setFilter('Educação')}
-          >
-            Educação
-          </FilterButton>
+          {categories.map((category) => (
+            <FilterButton
+              key={category.id}
+              variant={
+                filter === `${category.name}` ? 'selected' : 'unselected'
+              }
+              onClick={() => handleFilterBooks(category.name)}
+            >
+              {category.name}
+            </FilterButton>
+          ))}
         </Filters>
 
         <Bookshelf>
-          {books.map((book: Book) => (
+          {filteredBooks.map((book: Book) => (
             <ReviewModal
               key={book.id}
               bookData={book}
@@ -123,6 +144,8 @@ export default function Explorer({ books }: ExplorerProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
+  const categories = await prisma.category.findMany()
+
   const booksData = await prisma.book.findMany({
     include: {
       ratings: true,
@@ -150,7 +173,7 @@ export const getStaticProps: GetStaticProps = async () => {
   })
 
   return {
-    props: { books },
+    props: { books, categories },
     revalidate: 60 * 60 * 24, // 1 dia
   }
 }
