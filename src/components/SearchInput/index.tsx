@@ -4,7 +4,7 @@ import { ComponentProps } from 'react'
 
 interface SearchInputProps extends ComponentProps<typeof Input> {
   disabled?: boolean
-  onClickSearch: () => void
+  onClickSearch?: () => void
 }
 
 export function SearchInput({

@@ -66,7 +66,7 @@ export const ReviewsWrapper = styled('div', {
   },
 })
 
-export const SearchForm = styled('form', {})
+export const SearchForm = styled('div', {})
 
 export const Reviews = styled('div', {
   marginTop: '$8',

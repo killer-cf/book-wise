@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import Image from 'next/image'
 import { BookOpen, BookmarkSimple, Books, User, UserList } from 'phosphor-react'
 import { GetServerSideProps } from 'next'
 
+import findMaxKey from '@/utils/findMaxKey'
+import { formatDistanceToNow } from '@/utils/formatDistanceToNow'
 import { prisma } from '@/lib/prisma'
 import { SideBar } from '@/components/SideBar'
 import { SearchInput } from '@/components/SearchInput'
@@ -24,9 +27,18 @@ import {
   UserInfo,
   UserProfile,
 } from './styles'
-import findMaxKey from '@/utils/findMaxKey'
-import { formatDistanceToNow } from '@/utils/formatDistanceToNow'
 
+type Rating = {
+  id: string
+  rate: number
+  description: string
+  created_at: string
+  book: {
+    name: string
+    author: string
+    cover_url: string
+  }
+}
 interface ProfileProps {
   user: {
     name: string
@@ -37,20 +49,20 @@ interface ProfileProps {
     booksReview: number
     authorsRead: number
   }
-  ratings: {
-    id: string
-    rate: number
-    description: string
-    created_at: string
-    book: {
-      name: string
-      author: string
-      cover_url: string
-    }
-  }[]
+  ratings: Rating[]
 }
 
 export default function Profile({ user, ratings }: ProfileProps) {
+  const [searchValue, setSearchValue] = useState('')
+
+  const filteredRatings = ratings.filter(
+    (rating) =>
+      rating.book.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      rating.book.author
+        .toLowerCase()
+        .includes(searchValue.toLocaleLowerCase()),
+  )
+
   return (
     <Container>
       <SideBar />
@@ -62,10 +74,14 @@ export default function Profile({ user, ratings }: ProfileProps) {
         <ReviewsAndProfile>
           <ReviewsWrapper>
             <SearchForm>
-              <SearchInput placeholder="Buscar livro avaliado" />
+              <SearchInput
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="Buscar livro avaliado"
+              />
             </SearchForm>
             <Reviews>
-              {ratings.map((rating) => (
+              {filteredRatings.map((rating) => (
                 <Review key={rating.id}>
                   <p>{formatDistanceToNow(rating.created_at)}</p>
 
