@@ -65,8 +65,8 @@ export function SideBar() {
 
           {isAuthenticated && (
             <Link
-              href="/profile"
-              className={router.pathname === '/profile' ? 'active' : ''}
+              href={`/users/${session.data.user.id}`}
+              className={router.pathname === 'f' ? 'active' : ''}
             >
               <div></div>
               <User size={24} />
