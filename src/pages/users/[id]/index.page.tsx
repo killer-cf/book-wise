@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import { BookOpen, BookmarkSimple, Books, User, UserList } from 'phosphor-react'
+import { GetServerSideProps } from 'next'
 
+import { prisma } from '@/lib/prisma'
 import { SideBar } from '@/components/SideBar'
 import { SearchInput } from '@/components/SearchInput'
 import { StarsReview } from '@/components/StarsReview'
@@ -22,8 +24,33 @@ import {
   UserInfo,
   UserProfile,
 } from './styles'
+import findMaxKey from '@/utils/findMaxKey'
+import { formatDistanceToNow } from '@/utils/formatDistanceToNow'
 
-export default function Profile() {
+interface ProfileProps {
+  user: {
+    name: string
+    image: string
+    mostReadCategory: string
+    memberSize: number
+    pagesRead: number
+    booksReview: number
+    authorsRead: number
+  }
+  ratings: {
+    id: string
+    rate: number
+    description: string
+    created_at: string
+    book: {
+      name: string
+      author: string
+      cover_url: string
+    }
+  }[]
+}
+
+export default function Profile({ user, ratings }: ProfileProps) {
   return (
     <Container>
       <SideBar />
@@ -38,85 +65,44 @@ export default function Profile() {
               <SearchInput placeholder="Buscar livro avaliado" />
             </SearchForm>
             <Reviews>
-              <Review>
-                <p>Há 2 dias</p>
+              {ratings.map((rating) => (
+                <Review key={rating.id}>
+                  <p>{formatDistanceToNow(rating.created_at)}</p>
 
-                <BookCard>
-                  <div>
-                    <Image
-                      src="/images/books/o-hobbit.png"
-                      alt=""
-                      width={108}
-                      height={152}
-                    />
-                    <BookDetails>
-                      <div>
-                        <h2>O Hobbit</h2>
-                        <span>J.R.R. Tolkien</span>
-                      </div>
-                      <StarsReview />
-                    </BookDetails>
-                  </div>
-                  <p>
-                    Tristique massa sed enim lacinia odio. Congue ut faucibus
-                    nunc vitae non. Nam feugiat vel morbi viverra vitae mi.
-                    Vitae fringilla ut et suspendisse enim suspendisse vitae.
-                    Leo non eget lacus sollicitudin tristique pretium quam.
-                    Mollis et luctus amet sed convallis varius massa sagittis.
-                    Proin sed proin at leo quis ac sem. Nam donec accumsan
-                    curabitur amet tortor quam sit. Bibendum enim sit dui lorem
-                    urna amet elit rhoncus ut. Aliquet euismod vitae ut turpis.
-                    Aliquam amet integer pellentesque.
-                  </p>
-                </BookCard>
-              </Review>
-
-              <Review>
-                <p>Há 2 dias</p>
-
-                <BookCard>
-                  <div>
-                    <Image
-                      src="/images/books/o-hobbit.png"
-                      alt=""
-                      width={108}
-                      height={152}
-                    />
-                    <BookDetails>
-                      <div>
-                        <h2>O Hobbit</h2>
-                        <span>J.R.R. Tolkien</span>
-                      </div>
-                      <StarsReview />
-                    </BookDetails>
-                  </div>
-                  <p>
-                    Tristique massa sed enim lacinia odio. Congue ut faucibus
-                    nunc vitae non. Nam feugiat vel morbi viverra vitae mi.
-                    Vitae fringilla ut et suspendisse enim suspendisse vitae.
-                    Leo non eget lacus sollicitudin tristique pretium quam.
-                    Mollis et luctus amet sed convallis varius massa sagittis.
-                    Proin sed proin at leo quis ac sem. Nam donec accumsan
-                    curabitur amet tortor quam sit. Bibendum enim sit dui lorem
-                    urna amet elit rhoncus ut. Aliquet euismod vitae ut turpis.
-                    Aliquam amet integer pellentesque.
-                  </p>
-                </BookCard>
-              </Review>
+                  <BookCard>
+                    <div>
+                      <Image
+                        src={rating.book.cover_url}
+                        alt={rating.book.name}
+                        width={108}
+                        height={152}
+                      />
+                      <BookDetails>
+                        <div>
+                          <h2>{rating.book.name}</h2>
+                          <span>{rating.book.author}</span>
+                        </div>
+                        <StarsReview rate={rating.rate} />
+                      </BookDetails>
+                    </div>
+                    <p>{rating.description}</p>
+                  </BookCard>
+                </Review>
+              ))}
             </Reviews>
           </ReviewsWrapper>
           <UserProfile>
             <ProfileHeader>
-              <Avatar size="lg" />
-              <h3>Madson Kilder</h3>
-              <p>membro desde 2023</p>
+              <Avatar src={user.image} size="lg" />
+              <h3>{user.name}</h3>
+              <p>membro desde {user.memberSize}</p>
             </ProfileHeader>
             <Spacer />
             <UserInfo>
               <InfoBox>
                 <BookOpen size={32} />
                 <div>
-                  <h4>3853</h4>
+                  <h4>{user.pagesRead}</h4>
                   <p>Páginas lidas</p>
                 </div>
               </InfoBox>
@@ -124,7 +110,7 @@ export default function Profile() {
               <InfoBox>
                 <Books size={32} />
                 <div>
-                  <h4>10</h4>
+                  <h4>{user.booksReview}</h4>
                   <p>Livros avaliados</p>
                 </div>
               </InfoBox>
@@ -132,7 +118,7 @@ export default function Profile() {
               <InfoBox>
                 <UserList size={32} />
                 <div>
-                  <h4>8</h4>
+                  <h4>{user.authorsRead}</h4>
                   <p>Autores lidos</p>
                 </div>
               </InfoBox>
@@ -140,7 +126,7 @@ export default function Profile() {
               <InfoBox>
                 <BookmarkSimple size={32} />
                 <div>
-                  <h4>Computação</h4>
+                  <h4>{user.mostReadCategory}</h4>
                   <p>Categoria mais lida</p>
                 </div>
               </InfoBox>
@@ -150,4 +136,107 @@ export default function Profile() {
       </Content>
     </Container>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const id = String(params?.id)
+
+  const userData = await prisma.user.findUnique({
+    where: { id },
+    include: {
+      ratings: {
+        orderBy: { created_at: 'desc' },
+        select: {
+          id: true,
+          rate: true,
+          description: true,
+          created_at: true,
+          book: {
+            select: {
+              name: true,
+              author: true,
+              cover_url: true,
+              total_pages: true,
+              categories: { include: { category: true } },
+            },
+          },
+        },
+      },
+    },
+  })
+
+  if (!userData) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const memberSize = userData.created_at.getFullYear()
+
+  const pagesRead = userData.ratings.reduce((acc, rating) => {
+    acc = acc + rating.book.total_pages
+    return acc
+  }, 0)
+
+  const booksReview = userData.ratings.reduce((acc: string[], rating) => {
+    const book = rating.book.name
+    if (!acc.includes(book)) {
+      acc.push(book)
+    }
+    return acc
+  }, []).length
+
+  const authorsRead = userData.ratings.reduce((acc: string[], rating) => {
+    const author = rating.book.author
+    if (!acc.includes(author)) {
+      acc.push(author)
+    }
+    return acc
+  }, []).length
+
+  type Rating = {
+    [key: string]: number
+  }
+
+  const readCategories = userData.ratings.reduce((acc: Rating, rating) => {
+    rating.book.categories.map((c) => {
+      const category = c.category.name
+      if (acc[category]) {
+        return (acc[category] += 1)
+      }
+
+      return (acc[category] = 1)
+    })
+    return acc
+  }, {})
+
+  const user = {
+    name: userData.name,
+    image: userData.image,
+    mostReadCategory: findMaxKey(readCategories),
+    memberSize,
+    pagesRead,
+    booksReview,
+    authorsRead,
+  }
+
+  const ratings = userData.ratings.map((rating) => {
+    return {
+      ...rating,
+      created_at: String(rating.created_at),
+      book: {
+        name: rating.book.name,
+        author: rating.book.author,
+        cover_url: rating.book.cover_url,
+      },
+    }
+  })
+  console.log(ratings)
+
+  return {
+    props: {
+      user,
+      ratings,
+    },
+  }
 }

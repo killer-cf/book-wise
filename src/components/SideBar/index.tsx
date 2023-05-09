@@ -23,8 +23,6 @@ export function SideBar() {
 
   const isAuthenticated = session.status === 'authenticated'
 
-  console.log(router.pathname)
-
   function handleMenu() {
     setMenu(() => {
       const status = menu === 'flex' ? 'none' : 'flex'
