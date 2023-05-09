@@ -23,6 +23,8 @@ export function SideBar() {
 
   const isAuthenticated = session.status === 'authenticated'
 
+  console.log(router.pathname)
+
   function handleMenu() {
     setMenu(() => {
       const status = menu === 'flex' ? 'none' : 'flex'
@@ -66,7 +68,7 @@ export function SideBar() {
           {isAuthenticated && (
             <Link
               href={`/users/${session.data.user.id}`}
-              className={router.pathname === 'f' ? 'active' : ''}
+              className={router.pathname === '/users/[id]' ? 'active' : ''}
             >
               <div></div>
               <User size={24} />

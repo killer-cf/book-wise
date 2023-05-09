@@ -51,6 +51,14 @@ export const Links = styled('div', {
     textDecoration: 'none',
     color: '$gray400',
 
+    '&:hover': {
+      color: '$gray200',
+
+      svg: {
+        color: '$gray200',
+      },
+    },
+
     '&.active': {
       color: '$gray200',
       fontWeight: 'bold',

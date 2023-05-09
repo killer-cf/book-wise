@@ -4,6 +4,7 @@ import { BookOpen, BookmarkSimple, Books, User, UserList } from 'phosphor-react'
 import { SideBar } from '@/components/SideBar'
 import { SearchInput } from '@/components/SearchInput'
 import { StarsReview } from '@/components/StarsReview'
+import { Avatar } from '@/components/Avatar'
 import {
   BookCard,
   BookDetails,
@@ -21,7 +22,6 @@ import {
   UserInfo,
   UserProfile,
 } from './styles'
-import { Avatar } from '@/components/Avatar'
 
 export default function Profile() {
   return (
