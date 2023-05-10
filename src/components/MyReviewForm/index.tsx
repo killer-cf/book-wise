@@ -74,7 +74,7 @@ export function MyReviewForm({
     <Container onSubmit={handleSubmit(handleSendForm)}>
       <header>
         <UserBox>
-          <Avatar size="sm" src={user?.image!} />
+          <Avatar href={`/users/${user?.id}`} size="sm" src={user?.image!} />
           <strong>{user?.name}</strong>
         </UserBox>
         <StarsHate>

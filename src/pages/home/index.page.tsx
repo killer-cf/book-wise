@@ -122,7 +122,11 @@ export default function Home({
                 <BoxRecentReviews key={review.id}>
                   <header>
                     <UserBox>
-                      <Avatar src={review.user.image ?? ''} size="sm" />
+                      <Avatar
+                        href={`/users/${review.user.id}`}
+                        src={review.user.image ?? ''}
+                        size="sm"
+                      />
                       <div>
                         <strong>{review.user.name}</strong>
                         <p>{formatDistanceToNow(review.created_at)}</p>

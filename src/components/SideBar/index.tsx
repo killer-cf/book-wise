@@ -77,7 +77,11 @@ export function SideBar() {
       </div>
       {isAuthenticated ? (
         <LogoutBox>
-          <Avatar size="xs" src={session.data.user?.image!} />
+          <Avatar
+            href={`/users/${session.data.user?.id}`}
+            size="xs"
+            src={session.data.user?.image ?? ''}
+          />
           <p>{session.data.user?.name}</p>
           <button onClick={handleSignOut}>
             <SignOut size={20} />

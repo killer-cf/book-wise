@@ -1,7 +1,8 @@
 import * as Avatar from '@radix-ui/react-avatar'
 import { styled } from '../../../stitches.config'
+import Link from 'next/link'
 
-export const AvatarBorder = styled('div', {
+export const AvatarLink = styled(Link, {
   borderRadius: '$full',
   display: 'flex',
   justifyContent: 'center',

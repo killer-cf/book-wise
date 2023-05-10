@@ -130,7 +130,11 @@ export function ReviewModal({
                       <Review key={review.id}>
                         <header>
                           <UserBox>
-                            <Avatar size="sm" src={review.user.image} />
+                            <Avatar
+                              href={`/users/${review.user.id}`}
+                              size="sm"
+                              src={review.user.image}
+                            />
                             <div>
                               <strong>{review.user.name}</strong>
                               <p>{formatDistanceToNow(review.created_at)}</p>

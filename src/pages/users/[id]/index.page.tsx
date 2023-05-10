@@ -41,6 +41,7 @@ type Rating = {
 }
 interface ProfileProps {
   user: {
+    id: string
     name: string
     image: string
     mostReadCategory: string
@@ -109,7 +110,7 @@ export default function Profile({ user, ratings }: ProfileProps) {
           </ReviewsWrapper>
           <UserProfile>
             <ProfileHeader>
-              <Avatar src={user.image} size="lg" />
+              <Avatar href={`/users/${user.id}`} src={user.image} size="lg" />
               <h3>{user.name}</h3>
               <p>membro desde {user.memberSize}</p>
             </ProfileHeader>
@@ -227,6 +228,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }, {})
 
   const user = {
+    id: userData.id,
     name: userData.name,
     image: userData.image,
     mostReadCategory: findMaxKey(readCategories),

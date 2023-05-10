@@ -4,16 +4,17 @@ import {
   AvatarContainer,
   AvatarImage,
   AvatarFallback,
-  AvatarBorder,
+  AvatarLink,
 } from './styles'
 
 interface AvatarProps extends ComponentProps<typeof AvatarImage> {
   size: 'xs' | 'sm' | 'lg' | undefined
+  href: string
 }
 
-export function Avatar({ size = 'sm', ...rest }: AvatarProps) {
+export function Avatar({ href, size = 'sm', ...rest }: AvatarProps) {
   return (
-    <AvatarBorder size={size}>
+    <AvatarLink href={href} size={size}>
       <AvatarContainer size={size}>
         <AvatarImage {...rest} />
 
@@ -21,6 +22,6 @@ export function Avatar({ size = 'sm', ...rest }: AvatarProps) {
           <User />
         </AvatarFallback>
       </AvatarContainer>
-    </AvatarBorder>
+    </AvatarLink>
   )
 }
