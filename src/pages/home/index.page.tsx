@@ -63,7 +63,7 @@ export type Book = {
 interface HomeProps {
   recentReviews: Review[]
   spotlight: Book[]
-  lastReading: Book
+  lastReading: Book & { review_at: string }
 }
 
 export default function Home({
@@ -87,21 +87,21 @@ export default function Home({
               <RecentReading>
                 <Subtitle>
                   <h3>Sua última leitura</h3>
-                  <Link href="/profile">
+                  <Link href={`/`}>
                     Ver todas <CaretRight />
                   </Link>
                 </Subtitle>
 
                 <BoxLastReading>
                   <Image
-                    src="/images/books/entendendo-algoritmos.png"
+                    src={lastReading.cover_url}
                     alt=""
                     width={108}
                     height={152}
                   />
                   <div style={{ flex: 1 }}>
                     <header>
-                      <p>{formatDistanceToNow(lastReading.created_at)}</p>
+                      <p>{formatDistanceToNow(lastReading.review_at)}</p>
                       <StarsReview rate={lastReading.rate} />
                     </header>
 
@@ -187,6 +187,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
             book: {
               include: { ratings: true },
             },
+            created_at: true,
           },
         },
       },
@@ -200,7 +201,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         author: book.author,
         cover_url: book.cover_url,
         summary: book.summary,
-        created_at: String(new Date(book.created_at)),
+        review_at: String(new Date(lastReadingUser.ratings[0].created_at)),
         rate: calcBookRate(book.ratings.map((book) => book.rate)),
       }
     }
