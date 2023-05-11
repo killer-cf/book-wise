@@ -11,13 +11,13 @@ export default async function handle(
   }
 
   let category = String(req.query.category)
-  const input = String(req.query.input)
 
   if (category === 'Tudo') {
     category = ''
   }
 
   const booksData = await prisma.book.findMany({
+    orderBy: { name: 'asc' },
     include: {
       ratings: true,
       categories: { include: { category: true } },
@@ -29,14 +29,6 @@ export default async function handle(
           category: { name: { contains: category } },
         },
       },
-      OR: [
-        {
-          name: { contains: input },
-        },
-        {
-          author: { contains: input },
-        },
-      ],
     },
   })
 

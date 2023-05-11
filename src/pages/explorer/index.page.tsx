@@ -21,6 +21,7 @@ import {
   BookDetails,
   SearchForm,
 } from './styles'
+import { useQuery } from 'react-query'
 
 export type Rating = {
   id: string
@@ -55,7 +56,6 @@ interface ExplorerProps {
 
 export default function Explorer({ books, categories }: ExplorerProps) {
   const [filter, setFilter] = useState('Tudo')
-  const [filteredBooks, setFilteredBooks] = useState(![] || books)
   const [ratings, setRatings] = useState<Rating[]>([])
   const [searchValue, setSearchValue] = useState('')
 
@@ -69,35 +69,35 @@ export default function Explorer({ books, categories }: ExplorerProps) {
     setRatings(ratings.data)
   }
 
-  async function filterFetch(category: string) {
-    const filteredBooks = await api.get('/books', {
-      params: {
-        category,
-        input: '',
-      },
-    })
-    setFilteredBooks(filteredBooks.data.books)
+  let { data: filteredBooks } = useQuery<Book[]>(
+    ['books', filter],
+    async () => {
+      const response = await api.get('/books', {
+        params: {
+          category: filter,
+        },
+      })
+
+      return response.data.books
+    },
+  )
+
+  if (searchValue.length > 0) {
+    filteredBooks = filteredBooks?.filter(
+      (book) =>
+        book.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchValue.toLocaleLowerCase()),
+    )
   }
+
+  const allBooks = filteredBooks || books
 
   async function handleFilterBooks(category: string) {
     setFilter(category)
-    filterFetch(category)
   }
 
   function handleRemoveFilter() {
     setFilter('Tudo')
-    setFilteredBooks(books)
-  }
-
-  async function submitSearch() {
-    const response = await api.get('/books', {
-      params: {
-        category: filter,
-        input: searchValue,
-      },
-    })
-
-    setFilteredBooks(response.data.books)
   }
 
   return (
@@ -114,7 +114,6 @@ export default function Explorer({ books, categories }: ExplorerProps) {
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder="Buscar livro ou autor"
-              onClickSearch={submitSearch}
             />
           </SearchForm>
         </Header>
@@ -140,7 +139,7 @@ export default function Explorer({ books, categories }: ExplorerProps) {
         </Filters>
 
         <Bookshelf>
-          {filteredBooks.map((book: Book) => (
+          {allBooks.map((book: Book) => (
             <ReviewModal
               key={book.id}
               bookData={book}
@@ -169,6 +168,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const categories = await prisma.category.findMany()
 
   const booksData = await prisma.book.findMany({
+    orderBy: { name: 'asc' },
     include: {
       ratings: true,
       categories: { include: { category: true } },
