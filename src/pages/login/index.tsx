@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 
 import ÌmageIntro from 'public/images/intro.png'
 import {
@@ -14,11 +14,6 @@ import {
 
 export default function Login() {
   const router = useRouter()
-  const session = useSession()
-
-  if (session.status === 'authenticated') {
-    router.push('/home')
-  }
 
   async function handleNavigateToHome() {
     await router.push('/home')
