@@ -177,6 +177,8 @@ export default function Home({
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getServerSession(req, res, authOptions)
 
+  console.log(session)
+
   let lastReading = null
   if (session?.user) {
     const lastReadingUser = await prisma.user.findUnique({
@@ -258,8 +260,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       spotlight,
       lastReading,
       user: {
-        id: session?.user.id,
-        name: session?.user.name,
+        id: session?.user.id ?? '',
+        name: session?.user.name ?? '',
       },
     },
   }
