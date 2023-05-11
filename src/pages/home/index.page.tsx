@@ -2,7 +2,6 @@ import { GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import Image from 'next/image'
-// import { useSession } from 'next-auth/react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 
 import { prisma } from '@/lib/prisma'
@@ -64,15 +63,18 @@ interface HomeProps {
   recentReviews: Review[]
   spotlight: Book[]
   lastReading: Book & { review_at: string }
+  user: {
+    id: string
+    name: string
+  }
 }
 
 export default function Home({
   recentReviews,
   spotlight,
   lastReading,
+  user,
 }: HomeProps) {
-  // const session = useSession()
-
   return (
     <Container>
       <SideBar />
@@ -87,7 +89,7 @@ export default function Home({
               <RecentReading>
                 <Subtitle>
                   <h3>Sua última leitura</h3>
-                  <Link href={`/`}>
+                  <Link href={`/users/${user.id}`}>
                     Ver todas <CaretRight />
                   </Link>
                 </Subtitle>
@@ -255,6 +257,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       recentReviews,
       spotlight,
       lastReading,
+      user: {
+        id: session?.user.id,
+        name: session?.user.name,
+      },
     },
   }
 }

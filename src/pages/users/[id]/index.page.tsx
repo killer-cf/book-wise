@@ -249,7 +249,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       },
     }
   })
-  console.log(ratings)
 
   return {
     props: {
