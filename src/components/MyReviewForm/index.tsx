@@ -1,4 +1,11 @@
+import { useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, Star, X } from 'phosphor-react'
+import { z } from 'zod'
+
+import { api } from '@/lib/axios'
 import { Avatar } from '../Avatar'
 import {
   Button,
@@ -7,12 +14,6 @@ import {
   StarsHate,
   UserBox,
 } from './styles'
-import { useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { api } from '@/lib/axios'
 
 const myReviewFormSchema = z.object({
   rate: z

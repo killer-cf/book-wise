@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Binoculars } from 'phosphor-react'
 import Image from 'next/image'
 import { GetStaticProps } from 'next'
+import { useQuery } from 'react-query'
 
 import { prisma } from '@/lib/prisma'
 import { StarsReview } from '@/components/StarsReview'
@@ -21,7 +22,6 @@ import {
   BookDetails,
   SearchForm,
 } from './styles'
-import { useQuery } from 'react-query'
 
 export type Rating = {
   id: string
