@@ -197,8 +197,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     })
 
-    if (lastReadingUser) {
-      const book = lastReadingUser.ratings[0].book
+    if (lastReadingUser?.ratings[0]) {
+      const book = lastReadingUser.ratings[0]?.book
       lastReading = {
         id: book.id,
         name: book.name,
