@@ -46,6 +46,7 @@ export function MyReviewForm({
     handleSubmit,
     register,
     setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<MyReviewFormData>({
     resolver: zodResolver(myReviewFormSchema),
@@ -53,6 +54,8 @@ export function MyReviewForm({
       rate: activeStars,
     },
   })
+
+  const descriptionCount = watch('description')?.split('').length || 0
 
   const session = useSession()
   const user = session.data?.user
@@ -98,7 +101,7 @@ export function MyReviewForm({
         </StarsHate>
       </header>
       <textarea {...register('description')} />
-      <p>0/450</p>
+      <p>{descriptionCount}/450</p>
       <ButtonsAndErrors>
         <div>
           <p>{errors.description ? errors.description.message : ''}</p>
