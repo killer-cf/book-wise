@@ -10,8 +10,8 @@ interface LoginModalProps {
   children: ReactNode
 }
 
-async function handleLoginGithub() {
-  signIn('github', { callbackUrl: '/home' })
+async function handleLogin(provider: string) {
+  signIn(provider, { callbackUrl: '/home' })
 }
 
 export function LoginModal({ children }: LoginModalProps) {
@@ -25,7 +25,7 @@ export function LoginModal({ children }: LoginModalProps) {
           <Title>Faça login para deixar sua avaliação</Title>
 
           <div>
-            <Button>
+            <Button onClick={() => handleLogin('google')}>
               <Image
                 src="/images/google-icon.png"
                 width={32}
@@ -34,7 +34,7 @@ export function LoginModal({ children }: LoginModalProps) {
               />
               Entrar com Google
             </Button>
-            <Button onClick={handleLoginGithub}>
+            <Button onClick={() => handleLogin('github')}>
               <Image
                 src="/images/github-icon.png"
                 width={32}

@@ -19,8 +19,8 @@ export default function Login() {
     await router.push('/home')
   }
 
-  async function handleLoginGithub() {
-    signIn('github', { callbackUrl: '/home' })
+  async function handleLogin(provider: string) {
+    signIn(provider, { callbackUrl: '/home' })
   }
 
   return (
@@ -35,7 +35,7 @@ export default function Login() {
             <h2>Boas vindas!</h2>
             <p>Faça seu login ou acesse como visitante.</p>
           </Header>
-          <Button>
+          <Button onClick={() => handleLogin('google')}>
             <Image
               src="/images/google-icon.png"
               width={32}
@@ -44,7 +44,7 @@ export default function Login() {
             />
             Entrar com Google
           </Button>
-          <Button onClick={handleLoginGithub}>
+          <Button onClick={() => handleLogin('github')}>
             <Image
               src="/images/github-icon.png"
               width={32}
