@@ -86,6 +86,7 @@ export default function Explorer({ books, categories }: ExplorerProps) {
 
       return response.data.books
     },
+    { initialData: books },
   )
 
   if (searchValue.length > 0) {
@@ -95,8 +96,6 @@ export default function Explorer({ books, categories }: ExplorerProps) {
         book.author.toLowerCase().includes(searchValue.toLocaleLowerCase()),
     )
   }
-
-  const allBooks = filteredBooks || books
 
   async function handleFilterBooks(category: string) {
     setFilter(category)
@@ -145,7 +144,7 @@ export default function Explorer({ books, categories }: ExplorerProps) {
         </Filters>
 
         <Bookshelf>
-          {allBooks.map((book: Book) => (
+          {filteredBooks?.map((book: Book) => (
             <ReviewModal
               key={book.id}
               bookData={book}
