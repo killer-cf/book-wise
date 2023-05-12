@@ -56,17 +56,23 @@ interface ExplorerProps {
 
 export default function Explorer({ books, categories }: ExplorerProps) {
   const [filter, setFilter] = useState('Tudo')
-  const [ratings, setRatings] = useState<Rating[]>([])
   const [searchValue, setSearchValue] = useState('')
+  const [bookId, setBookId] = useState('')
+
+  const { data: ratings } = useQuery<Rating[]>(
+    ['ratings', bookId],
+    async () => {
+      const response = await api.get('/review', {
+        params: {
+          bookId,
+        },
+      })
+      return response.data
+    },
+  )
 
   async function getReviewsByBook(bookId: string) {
-    const ratings = await api.get('/review', {
-      params: {
-        bookId,
-      },
-    })
-
-    setRatings(ratings.data)
+    setBookId(bookId)
   }
 
   let { data: filteredBooks } = useQuery<Book[]>(

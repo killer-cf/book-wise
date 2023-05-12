@@ -5,6 +5,7 @@ import { Book } from '@/pages/home/index.page'
 import { ReviewModal } from '../ReviewModal'
 import { useState } from 'react'
 import { api } from '@/lib/axios'
+import { useQuery } from 'react-query'
 
 interface BookCardProps {
   book: Book
@@ -23,16 +24,22 @@ type Rating = {
 }
 
 export function BookCard({ book }: BookCardProps) {
-  const [ratings, setRatings] = useState<Rating[]>([])
+  const [bookId, setBookId] = useState('')
+
+  const { data: ratings } = useQuery<Rating[]>(
+    ['ratings', bookId],
+    async () => {
+      const response = await api.get('/review', {
+        params: {
+          bookId,
+        },
+      })
+      return response.data
+    },
+  )
 
   async function getReviewsByBook(bookId: string) {
-    const ratings = await api.get('/review', {
-      params: {
-        bookId,
-      },
-    })
-
-    setRatings(ratings.data)
+    setBookId(bookId)
   }
 
   return (

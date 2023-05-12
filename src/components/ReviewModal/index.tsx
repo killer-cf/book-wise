@@ -29,7 +29,7 @@ import {
 interface ReviewDialogProps {
   children: ReactNode
   bookData: Book
-  ratings: Rating[]
+  ratings: Rating[] | undefined
   getRatings: (bookId: string) => Promise<void>
 }
 
@@ -73,8 +73,8 @@ export function ReviewModal({
                       <div>
                         <StarsReview rate={bookData.rate} />
                         <p>
-                          {ratings.length}{' '}
-                          {ratings.length === 1 ? 'avaliação' : 'avaliações'}
+                          {ratings?.length}{' '}
+                          {ratings?.length === 1 ? 'avaliação' : 'avaliações'}
                         </p>
                       </div>
                     </BookDetails>
