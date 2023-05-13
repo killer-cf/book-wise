@@ -26,7 +26,7 @@ type Rating = {
 export function BookCard({ book }: BookCardProps) {
   const [bookId, setBookId] = useState('')
 
-  const { data: ratings } = useQuery<Rating[]>(
+  const { data: ratings, refetch } = useQuery<Rating[]>(
     ['ratings', bookId],
     async () => {
       const response = await api.get('/review', {
@@ -40,6 +40,7 @@ export function BookCard({ book }: BookCardProps) {
 
   async function getReviewsByBook(bookId: string) {
     setBookId(bookId)
+    refetch()
   }
 
   return (

@@ -59,7 +59,7 @@ export default function Explorer({ books, categories }: ExplorerProps) {
   const [searchValue, setSearchValue] = useState('')
   const [bookId, setBookId] = useState('')
 
-  const { data: ratings } = useQuery<Rating[]>(
+  const { data: ratings, refetch } = useQuery<Rating[]>(
     ['ratings', bookId],
     async () => {
       const response = await api.get('/review', {
@@ -73,6 +73,7 @@ export default function Explorer({ books, categories }: ExplorerProps) {
 
   async function getReviewsByBook(bookId: string) {
     setBookId(bookId)
+    refetch()
   }
 
   let { data: filteredBooks } = useQuery<Book[]>(
