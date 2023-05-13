@@ -19,6 +19,7 @@ export const Content = styled('main', {
   },
 
   '@media (max-width: 768px)': {
+    width: '100%',
     position: 'absolute',
     padding: '6rem 4%',
   },
@@ -167,7 +168,7 @@ export const BoxRecentReviews = styled('div', {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'self-start',
   },
 })
 
@@ -227,26 +228,14 @@ export const Spotlight = styled('section', {
   '@media screen and (max-width: 1024px)': {
     maxWidth: '38rem',
     width: '100%',
-    display: 'grid',
-    gap: '$5',
-    gridTemplateColumns: '1fr 1fr',
     marginLeft: 0,
     marginBottom: '$10',
   },
-  [`${Subtitle}`]: {
-    '@media screen and (max-width: 1024px)': {
-      marginBottom: 0,
-      gridColumnStart: 1,
-      gridColumnEnd: 3,
-    },
+})
 
-    '@media screen and (max-width: 524px)': {
-      marginBottom: 0,
-      gridColumnStart: 1,
-      gridColumnEnd: 2,
-    },
-  },
-  '@media screen and (max-width: 524px)': {
-    gridTemplateColumns: '1fr',
-  },
+export const Books = styled('div', {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+  gridAutoFlow: 'row',
+  gap: '$5',
 })

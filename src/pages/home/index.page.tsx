@@ -15,6 +15,7 @@ import { StarsReview } from '@/components/StarsReview'
 import { BookCard } from '@/components/BookCard'
 import {
   BookDetails,
+  Books,
   Bookshelf,
   BoxLastReading,
   BoxRecentReviews,
@@ -162,11 +163,11 @@ export default function Home({
               </Link>
             </Subtitle>
 
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <Books>
               {spotlight.map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
-            </div>
+            </Books>
           </Spotlight>
         </Bookshelf>
       </Content>

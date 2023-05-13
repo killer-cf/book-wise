@@ -126,6 +126,10 @@ export const LogoutBox = styled('div', {
     color: '#F75A68',
     cursor: 'pointer',
   },
+
+  '@media (max-width: 768px)': {
+    display: 'none',
+  },
 })
 
 export const MenuMobile = styled('button', {

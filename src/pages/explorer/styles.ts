@@ -96,9 +96,13 @@ export const FilterButton = styled('button', {
 
 export const Bookshelf = styled('div', {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(305px, 1fr))',
   gridAutoFlow: 'row',
   gap: '$5',
+
+  '@media screen and (max-width: 678px)': {
+    gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+  },
 })
 
 export const BookCard = styled('button', {
@@ -123,6 +127,8 @@ export const BookCard = styled('button', {
     color: '$gray100',
     fontSize: '$md',
     lineHeight: '$base',
+    textAlign: 'left',
+    width: '100%',
   },
 
   span: {
@@ -131,6 +137,7 @@ export const BookCard = styled('button', {
     fontSize: '$sm',
     lineHeight: '$base',
     marginBottom: '$3',
+    textAlign: 'left',
   },
 })
 
@@ -138,4 +145,11 @@ export const BookDetails = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
+
+  overflow: 'hidden',
+  '.description': {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
 })

@@ -76,7 +76,7 @@ export function SideBar() {
         </Links>
       </div>
       {isAuthenticated ? (
-        <LogoutBox>
+        <LogoutBox style={{ display: `${menu}` }}>
           <Avatar
             href={`/users/${session.data.user?.id}`}
             size="xs"

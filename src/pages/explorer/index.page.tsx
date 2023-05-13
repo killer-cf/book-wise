@@ -155,7 +155,7 @@ export default function Explorer({ books, categories }: ExplorerProps) {
               <BookCard onClick={() => getReviewsByBook(book.id)}>
                 <Image src={book.cover_url} alt="" width={108} height={152} />
                 <BookDetails>
-                  <div>
+                  <div className="description">
                     <h2>{book.name}</h2>
                     <span>{book.author}</span>
                   </div>

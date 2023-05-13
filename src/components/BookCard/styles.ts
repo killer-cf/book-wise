@@ -3,22 +3,16 @@ import { styled } from '../../../stitches.config'
 export const Container = styled('button', {
   backgroundColor: '$gray700',
   display: 'flex',
-  maxWidth: '20.25rem',
   border: '2px solid transparent',
-  marginBottom: '$5',
   padding: '$4 $5',
   borderRadius: '$md',
   gap: '$5',
   alignItems: 'stretch',
   cursor: 'pointer',
 
-  '@media screen and (max-width: 1024px)': {
-    marginBottom: 0,
-  },
-
   h2: {
     color: '$gray100',
-    fontSize: '$md',
+    fontSize: '$sm',
     lineHeight: '$base',
     textAlign: 'left',
   },
