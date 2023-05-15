@@ -3,6 +3,7 @@ import { SessionProvider } from 'next-auth/react'
 import { Nunito } from 'next/font/google'
 import { globalStyles } from '@/styles/global'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { Analytics } from '@vercel/analytics/react'
 
 const queryClient = new QueryClient()
 const nunito = Nunito({ subsets: ['cyrillic'] })
@@ -18,6 +19,7 @@ export default function App({
       <SessionProvider session={session}>
         <div className={nunito.className}>
           <Component {...pageProps} />
+          <Analytics />
         </div>
       </SessionProvider>
     </QueryClientProvider>
