@@ -25,7 +25,7 @@ export const Container = styled('aside', {
     backgroundImage: "url('/images/background-sidebar.svg')",
     backgroundSize: 'cover',
     padding: '$4 $5',
-    zIndex: 1000,
+    zIndex: 114,
   },
 })
 
