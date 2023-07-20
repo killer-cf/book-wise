@@ -53,7 +53,10 @@ export default function Login() {
             />
             Entrar com GitHub
           </Button>
-          <Button onClick={handleNavigateToHome}>
+          <Button
+            onClick={handleNavigateToHome}
+            data-cy="Acessar como visitante"
+          >
             <Image
               src="/images/RocketLaunch.png"
               width={32}
