@@ -9,10 +9,6 @@ jobs:
   build-and-push:
     name: 'Build and Push'
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      SHADOW_DATABASE_URL: ${{ secrets.SHADOW_DATABASE_URL }}
-      DIRECT_URL: ${{ secrets.DIRECT_URL }}
 
     steps:
       - name: Checkout
@@ -25,7 +21,12 @@ jobs:
           echo "sha=$SHA" >> $GITHUB_OUTPUT
       
       - name: Build docker image
-        run: docker build -t killercf/bookwise:${{ steps.generate_sha.outputs.sha }} .
+        run: |
+          docker build \
+            --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --build-arg SHADOW_DATABASE_URL=${{ secrets.SHADOW_DATABASE_URL }} \
+            --build-arg DIRECT_URL=${{ secrets.DIRECT_URL }} \
+            -t killercf/bookwise:${{ steps.generate_sha.outputs.sha }} .
 
       - name: Log into container register
         uses: docker/login-action@v3
