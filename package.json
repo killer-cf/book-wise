@@ -44,7 +44,6 @@
     "@rocketseat/eslint-config": "^1.2.0",
     "@types/node": "^18.15.11",
     "@types/uuid": "^9.0.1",
-    "cypress": "^12.17.1",
     "prisma": "^4.13.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
